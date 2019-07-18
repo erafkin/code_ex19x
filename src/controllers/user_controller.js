@@ -3,6 +3,7 @@ import User from '../models/user_model';
 export const getCrushes = (user) => {
     return new Promise((resolve, reject) => {
         // grab user object or send 404 if not found
+        
         User.findOne({ "email": user })
           .then((foundUser) => {
             if (foundUser !== null) {

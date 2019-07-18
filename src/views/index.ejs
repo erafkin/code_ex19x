@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title>Last Chances 19X</title>
+        <link href="/styles.css" rel="stylesheet" type="text/css"></link>
+
+    </head>
+    <body>
+        <h1>Welcome to Last Chances 19X</h1>
+        <button class="btn" id = "crush-btn" type="button" action="">
+            Click to get crushes
+        </button>
+        <h2> <% crushes %></h2>
+        <script>
+        $('#crush-btn').click(function(event) {
+                event.preventDefault();
+                $('#crush-brn').attr('action', "/");
+              });
+        </script>
+    </body>
+
+
+</html>
