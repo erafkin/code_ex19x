@@ -1,19 +1,12 @@
 {
-  "dependencies": {
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "mongoose": "^5.6.5",
-    "morgan": "^1.9.1",
-    "path": "^0.12.7"
-  },
-  "scripts": {
-    "start": "node server.js"
-  },
   "name": "last-chances-19x",
   "version": "1.0.0",
-  "main": "server.js",
-  "devDependencies": {},
+  "description": "",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node src/server.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/erafkin/code_ex19x.git"
@@ -24,5 +17,24 @@
     "url": "https://github.com/erafkin/code_ex19x/issues"
   },
   "homepage": "https://github.com/erafkin/code_ex19x#readme",
-  "description": ""
+  "dependencies": {
+    "@babel/preset-env": "^7.5.5",
+    "babel-loader": "^8.0.6",
+    "babel-polyfill": "^6.26.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.6.5",
+    "morgan": "^1.9.1",
+    "passport": "^0.4.0",
+    "passport-cas": "^0.1.1",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "eslint": "^6.0.1",
+    "nodemon": "^1.19.1"
+  }
 }
