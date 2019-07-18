@@ -15,6 +15,23 @@ router.route('/')
         if(!user){return res.redirect('/');}
         console.log('authed:' + JSON.stringify(user) + ' with ' + JSON.stringify(req.query));
         //search mongo db for user's crushes using user_controller
+        User.getCrushNumber(user)
+            .then((crushes)=>{
+                res.render('index', {crushes});
+            })
+            .catch((error)=>{
+                res.status(500).send(error.message);
+            })
+    })(req, res, next);
+    })
+
+router.route('/crushes')
+    .get((req, res, next)=>{
+    passport.authenticate('cas', (err, user, info)=>{
+        if(err){return next(err);}
+        if(!user){return res.redirect('/');}
+        console.log('authed:' + JSON.stringify(user) + ' with ' + JSON.stringify(req.query));
+        //search mongo db for user's crushes using user_controller
         User.getCrushes(user)
             .then((crushes)=>{
                 res.render('index', {crushes});
@@ -31,7 +48,7 @@ router.route('/')
             console.log('authed:' + JSON.stringify(user) + ' with ' + JSON.stringify(req.query));
 
             // TODO:
-            //getCrushes of crush, search for match, update accordingly
+            //getCrushes of crush, search for match, update accordingly (if match, call update matches on both crush and user)
             
         })(req, res, next);
         })
