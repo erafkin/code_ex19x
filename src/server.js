@@ -45,23 +45,23 @@ mongoose.Promise = global.Promise;
 // app.use('/users', userRouter);
 // app.use('/dev', devRouter);
 
-import users from './controllers/user_controller';
+import users from './controllers/user_controller.js';
 //default endpoint
 app.get('/', (req, res) => {
   res.send('welcome to the last chances 19x database');
 });
 
 //display crushes endpoint
-app.get('/crushes', (req, res, next)=>{
-    passport.authenticate('cas', (err, user, info)=>{
-        if(err){return next(err);}
-        if(!user){return res.redirect('/');}
-        console.log('authed: ${JSON.stringify(user)} with ${JSON.stringify(req.query)}');
+// app.get('/crushes', (req, res, next)=>{
+//     passport.authenticate('cas', (err, user, info)=>{
+//         if(err){return next(err);}
+//         if(!user){return res.redirect('/');}
+//         console.log('authed: ${JSON.stringify(user)} with ${JSON.stringify(req.query)}');
 
-        //search mongo db for user's crushes using user_controller
-        users.getCrushes(user);
-    })(req, res, next);
-});
+//         //search mongo db for user's crushes using user_controller
+//         users.getCrushes(user);
+//     })(req, res, next);
+// });
 
 
 // ping the server every 20 minutes so heroku stays awake
