@@ -54,7 +54,10 @@ router.route('/crushes')
             console.log('authed:' + JSON.stringify(user) + ' with ' + JSON.stringify(req.query));
 
             // TODO:
-            //getCrushes of crush, search for match, update accordingly (if match, call update matches on both crush and user)
+            //getCrushes of crush, search for match,
+            //if match: update my matches update their matches
+            //finally: update my crushes
+            // update accordingly (if match, call update matches on both crush and user)
             
         })(req, res, next);
         })

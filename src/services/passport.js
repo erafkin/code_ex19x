@@ -13,11 +13,10 @@ const casOptions = {
   serverBaseURL: 'http://localhost:8000/cas',
 };
 
-const casLogin = new cas.Strategy(casOptions, (profile, done) => {
-  console.log(`payload: ${profile}`);
-  console.log(`payload attributes: ` + profile.user);
+const casLogin = new cas.Strategy(casOptions, (user, done) => {
+  console.log(`payload: ${user}`);
 
-  return done(null, profile);
+  return done(null, user);
 });
 
 

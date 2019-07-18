@@ -3,13 +3,15 @@ import User from '../models/user_model';
 
 export const getNetid = (payload) =>{
     return new Promise((resolve, reject)=>{
-        let name = payload.split();
-        name[name.length-1]=name[name.length-1].substring(0, name.indexOf('@'));
+        let name = JSON.stringify(payload).split(" ");
+        name[name.length-1]=name[name.length-1].substring(0, name[name.length-1].indexOf('@'));
         let users = [];
-        console.log("payload name: " + payload.name);
+        console.log("payload name: " + name);
 
         //search by last name
-        users.push(User.find({"last_name":name[name.length-1]}));
+        // users.push(User.find({"last_name":name[name.length-1]}).select("netid"));
+        console.log("now we see if we found the right thing");
+        // console.log(User.find({"last_name":name[name.length-1]}, 'netid'));
         if(users.length>1){
             users = [];
             users.forEach(function(u){
@@ -34,7 +36,7 @@ export const getNetid = (payload) =>{
                     }
                 }else{
                     if(users.length===1){
-                        console.log("netid " + users[0]["netid"]);
+                        // console.log("netid " + users[0]["netid"]);
                         resolve(users[0]["netid"]);
                     }else{
                         reject(new Error(`user with name ${payload}" not found`));
@@ -44,7 +46,7 @@ export const getNetid = (payload) =>{
             
         }else{
             if(users.length===1){
-                console.log("netid " + users[0]["netid"]);
+                // console.log("netid " + users[0]["netid"]);
                 resolve(users[0]["netid"]);
             }else{
                 reject(new Error(`user with name ${payload}" not found`));
@@ -81,7 +83,7 @@ export const getCrushNumber = (user) => {
             if (foundCrushes !== null) {
               resolve(foundCrushes);
             } else {
-              reject(new Error(`User with email: ${user} not found`));
+              reject(new Error(`User with email: ${user} not found--testing that this is get crush number`));
             }
           })
           .catch((error) => {
