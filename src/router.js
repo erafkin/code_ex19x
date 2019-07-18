@@ -11,10 +11,16 @@ const router = express();
 router.route('/')
     .get((req, res, next)=>{
     passport.authenticate('cas', (err, user, info)=>{
+        console.log(user);
+        console.log(User.getNetid(user));
         if(err){return next(err);}
-        if(!user){return res.redirect('/');}
+        if(!user){
+            console.log("rejected");
+            return res.redirect('/');
+        }
         console.log('authed:' + JSON.stringify(user) + ' with ' + JSON.stringify(req.query));
         //search mongo db for user's crushes using user_controller
+
         User.getCrushNumber(user)
             .then((crushes)=>{
                 res.render('index', {crushes});

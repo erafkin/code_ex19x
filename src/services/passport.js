@@ -4,6 +4,7 @@ import cas from 'passport-cas';
 import dotenv from 'dotenv';
 // loads in .env file if needed
 dotenv.config({ silent: true });
+import User from '../models/user_model';
 
 
 const casOptions = {
@@ -12,13 +13,40 @@ const casOptions = {
   serverBaseURL: 'http://localhost:8000/cas',
 };
 
-const casLogin = new cas.Strategy(casOptions, (payload, done) => {
-  console.log(`payload: ${payload}`);
-  return done(null, payload);
+const casLogin = new cas.Strategy(casOptions, (profile, done) => {
+  console.log(`payload: ${profile}`);
+  console.log(`payload attributes: ` + profile.user);
+
+  return done(null, profile);
 });
+
 
 
 // Tell passport to use this strategy
 passport.use(casLogin);
+
+
+// passport.use(new (require('passport-cas').Strategy)({
+//     version: 'CAS3.0',
+
+//   ssoBaseURL: 'https://login.dartmouth.edu/cas',
+// //   serverBaseURL: process.env.REDIRECT_URL,
+//   serverBaseURL: 'http://localhost:8000/cas',
+//   }, function(profile, done) {
+//     var netid = profile.netid;
+//     console.log("profile attributes: " +profile.attributes);
+//     console.log("netid: " +netid);
+
+//     User.findOne({netid: netid}, function (err, user) {
+//       if (err) {
+//         return done(err);
+//       }
+//       if (!user) {
+//         return done(null, false, {message: 'Unknown user'});
+//       }
+//       user.attributes = profile.attributes;
+//       return done(null, user);
+//     });
+//   }));
 
 export default passport;
