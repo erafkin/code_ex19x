@@ -3,6 +3,11 @@ import * as User from './controllers/user_controller';
 import passport from './services/passport';
 const router = express();
 
+
+//FIX:
+//CAS is sending through the user in the form of --Emma P. Rafkin@DARTMOUTH.EDU--
+//this is not helpful and doesnt really match to anything. we need to figure out how to get the server to send the netid or email 
+
 router.route('/')
     .get((req, res, next)=>{
     passport.authenticate('cas', (err, user, info)=>{
