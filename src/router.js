@@ -12,7 +12,7 @@ const router = Router();
 
 
 router.route('/')
-    .get((req, res, next)=>{
+    .get((req, res)=>{
     passport.authenticate('cas', (err, user, info)=>{
         console.log("user: "+user);
         if(err){return next(err);}
@@ -23,7 +23,10 @@ router.route('/')
         console.log('authed:' + JSON.stringify(user) + ' with ' + JSON.stringify(req.query));
         //search mongo db for user's crushes using user_controller
         let netid = "";
-        UserID.getNetid(user).then((ni)=>{netid = ni;}).catch((error)=>{
+        UserID.getNetid(user).then((ni)=>{
+                console.log(ni);
+                netid = ni.slice();})        
+            .catch((error)=>{
             res.status(500).send(error.message);
         });
 
@@ -34,7 +37,7 @@ router.route('/')
             .catch((error)=>{
                 res.status(500).send(error.message);
             })
-    })(req, res, next);
+    })(req, res);
     })
 
     router.route('/crushes')

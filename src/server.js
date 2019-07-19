@@ -10,6 +10,23 @@ import router from './router';
 
 require('dotenv').config(); // load environment variables
 
+// database setup
+
+const mongoURI = process.env.MONGODB_URI  || 'mongodb://localhost/lc19x';
+mongoose.connect(mongoURI,{ useNewUrlParser: true });
+
+mongoose.connection.on("open", function(ref) {
+
+    console.log("Connected to mongo server--but have we really?");
+  });
+  
+  mongoose.connection.on("error", function(err) {
+    console.log("Could not connect to mongo server! ");
+    return console.log(err);
+  });
+// set mongoose promises to es6 default
+mongoose.Promise = global.Promise;
+
 // initialize
 const app = express();
 
@@ -19,29 +36,10 @@ app.use(cors());
 // enable/disable http request logging
 app.use(morgan('dev'));
 
-// database setup
-
-const mongoURI = process.env.MONGODB_URI  || 'mongodb://localhost/lc19x';
-
-mongoose.connect(mongoURI,{ useNewUrlParser: true });
-
-mongoose.connection.on("open", function(ref) {
-    console.log("Connected to mongo server.");
-  });
-  
-  mongoose.connection.on("error", function(err) {
-    console.log("Could not connect to mongo server!");
-    return console.log(err);
-  });
-// set mongoose promises to es6 default
-mongoose.Promise = global.Promise;
-
-// enable only if you want static assets from folder static
-// app.use(express.static('static'));
 
 // this just allows us to render ejs from the ../app/views directory
 app.set('view engine', 'ejs');
-app.use(express.static('static'));
+app.use(express.static('./styles.css'));
 app.set('views', path.join(__dirname, '../src/views'));
 
 // enable json message body for posting data to API
@@ -51,21 +49,23 @@ app.use(bodyParser.json());
 
 
 app.use('/user', router);
-// app.use('/dev', devRouter);
 
 //default endpoint
 app.get('/', (req, res) => {
   res.send('welcome to the last chances 19x database');
 });
 
-
+//endpoint to ping to keep it awake
+app.get('/dev', (req, res) => {
+    res.send('wake up heroku!');
+  });
 
 // ping the server every 20 minutes so heroku stays awake
 
-// //NEED TO PUT IN OUR SERVER NAME
-// setInterval(() => {
-//   axios.get('https://server-6amhealth.herokuapp.com/dev');
-// }, 1200000); // every 5 minutes (300000)
+//NEED TO PUT IN OUR SERVER NAME
+setInterval(() => {
+//   axios.get('https://our-url/dev');
+}, 1200000); // every 5 minutes (300000)
 
 // START THE SERVER
 // =============================================================================
