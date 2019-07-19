@@ -1,5 +1,6 @@
-import mongoose, { Schema, ObjectId } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
+mongoose.set('debug', true);
 const UserSchema = new Schema({
     legal_prefix: String,
     legal_first_name: String,
@@ -20,7 +21,7 @@ const UserSchema = new Schema({
     crushes: Array,  
     matches: Array,
 
-}, {collection: "students"},{ _id: false, minimize: false });
+}, {collection: "students"});
 
 UserSchema.set('toJSON', {
   virtuals: true,

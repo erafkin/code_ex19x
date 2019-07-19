@@ -1,12 +1,9 @@
-
-
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import path from 'path';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
-import passport from './services/passport';
 import { isBuffer } from 'util';
 
 import router from './router';
@@ -22,7 +19,22 @@ app.use(cors());
 // enable/disable http request logging
 app.use(morgan('dev'));
 
+// database setup
 
+const mongoURI = process.env.MONGODB_URI  || 'mongodb://localhost/lc19x';
+
+mongoose.connect(mongoURI,{ useNewUrlParser: true });
+
+mongoose.connection.on("open", function(ref) {
+    console.log("Connected to mongo server.");
+  });
+  
+  mongoose.connection.on("error", function(err) {
+    console.log("Could not connect to mongo server!");
+    return console.log(err);
+  });
+// set mongoose promises to es6 default
+mongoose.Promise = global.Promise;
 
 // enable only if you want static assets from folder static
 // app.use(express.static('static'));
@@ -36,21 +48,7 @@ app.set('views', path.join(__dirname, '../src/views'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// database setup
-// const mongoURI = process.env.MONGODB_URI  || 'mongodb://localhost/lc19x';
-const mongoURI = "mongodb+srv://lc19x:lastchances19x@lc19x-nfyrs.mongodb.net/test?retryWrites=true&w=majority";
-// const mongoURI = "mongodb://localhost:27017/lc19x";
 
-// console.log(process.env.MONGODB_URI);
-console.log(mongoURI);
-
-
-mongoose.connect(mongoURI,function(err) {
-    if(err) console.log(err);
-     console.log("connection successful");    }
-  );
-// set mongoose promises to es6 default
-mongoose.Promise = global.Promise;
 
 app.use('/user', router);
 // app.use('/dev', devRouter);

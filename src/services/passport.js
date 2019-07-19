@@ -4,7 +4,6 @@ import cas from 'passport-cas';
 import dotenv from 'dotenv';
 // loads in .env file if needed
 dotenv.config({ silent: true });
-import User from '../models/user_model';
 
 
 const casOptions = {

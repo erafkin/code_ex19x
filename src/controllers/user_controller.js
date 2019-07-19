@@ -4,6 +4,15 @@ import User from '../models/user_model';
 //TODO: switch out all the find by emails to find by net id
 
 export const getNetid = (payload) =>{
+
+    //THIS IS JUST A TEST TO CHECK IF IT CONNECTS TO THE DB--NOT ACTUALLY TO BE USED
+    return new Promise((resolve, reject)=>{
+        User.findOne({"netid":"f00368z"}).then((found)=>{
+            console.log(found);
+            if(found !== null) resolve(found);
+            else reject(new Error(`not connecting to the database????`));
+        });
+    });
     return new Promise((resolve, reject)=>{
         let name = JSON.stringify(payload);
         name = name.replace(".", "");
@@ -13,7 +22,7 @@ export const getNetid = (payload) =>{
         console.log("payload name: " + name);
 
 
-        User.findOne({ "email" : {$regex: /Emma.P.Rafkin/, '$options':'i'}}, {"netid":1})["netid"]
+        User.findOne({ "email" : {$regex: name, '$options':'i'}}, {"netid":1})["netid"]
 
             .then((foundNetID) =>{
                 if (foundNetID !== null) {
@@ -24,7 +33,7 @@ export const getNetid = (payload) =>{
                   } 
             })
             .catch((error) => {
-                reject(error);
+                reject(new Error(`User with email: ${foundNetID} not found--is this the error?`));
               })
         
     })};    
@@ -34,12 +43,12 @@ export const getCrushes = (user) => {
     return new Promise((resolve, reject) => {
         // grab user object or send 404 if not found
         
-        User.findOne({ "email": user }, {"crushes":1})
+        User.findOne({ "netid": user }, {"crushes":1})
           .then((foundCrushes) => {
             if (foundCrushes !== null) {
               resolve(foundCrushes);
             } else {
-              reject(new Error(`User with email: ${user} not found`));
+              reject(new Error(`User with netid: ${user} not found`));
             }
           })
           .catch((error) => {

@@ -1,7 +1,7 @@
-import express from 'express';
+import { Router } from 'express';
 import * as UserID from './controllers/user_controller';
 import passport from './services/passport';
-const router = express();
+const router = Router();
 
 
 //FIX:
@@ -14,9 +14,7 @@ const router = express();
 router.route('/')
     .get((req, res, next)=>{
     passport.authenticate('cas', (err, user, info)=>{
-        console.log(user);
-        console.log(UserID.getNetid(user));
-
+        console.log("user: "+user);
         if(err){return next(err);}
         if(!user){
             console.log("rejected");
@@ -24,8 +22,12 @@ router.route('/')
         }
         console.log('authed:' + JSON.stringify(user) + ' with ' + JSON.stringify(req.query));
         //search mongo db for user's crushes using user_controller
+        let netid = "";
+        UserID.getNetid(user).then((ni)=>{netid = ni;}).catch((error)=>{
+            res.status(500).send(error.message);
+        });
 
-        UserID.getCrushNumber(user)
+        UserID.getCrushNumber(netid)
             .then((crushes)=>{
                 res.render('index', {crushes});
             })
