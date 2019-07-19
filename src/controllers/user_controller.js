@@ -1,4 +1,5 @@
 import User from '../models/user_model';
+import { model } from 'mongoose';
 
 
 //TODO: switch out all the find by emails to find by net id
@@ -7,33 +8,23 @@ export const getNetid = (payload) =>{
 
     //THIS IS JUST A TEST TO CHECK IF IT CONNECTS TO THE DB--NOT ACTUALLY TO BE USED
     return new Promise((resolve, reject)=>{
-        User.findOne({"netid":"f00368z"}).then((found)=>{
-            console.log(found);
-            if(found !== null) resolve(found);
-            else reject(new Error(`not connecting to the database????`));
-        });
-    });
-    return new Promise((resolve, reject)=>{
         let name = JSON.stringify(payload);
+        name = name.slice();
         name = name.replace(".", "");
         name = name.substring(1, name.length);
         name=name.substring(0, name.indexOf('@'));
         name = name.replace(/ /g,".");
         console.log("payload name: " + name);
-
-
-        User.findOne({ "email" : {$regex: name, '$options':'i'}}, {"netid":1})["netid"]
-
+        User.findOne({ "email" : {$regex: name, $options:'i'}}, {"netid":1})
             .then((foundNetID) =>{
                 if (foundNetID !== null) {
-                    console.log(foundNetID);
-                    resolve(foundNetID);
+                    resolve(foundNetID["netid"]);
                   } else {
-                    reject(new Error(`User with email: ${foundNetID} not found--is this the error?`));
+                    reject(new Error(`User with email: ${foundNetID["netid"]} not found--is this the error?`));
                   } 
             })
             .catch((error) => {
-                reject(new Error(`User with email: ${foundNetID} not found--is this the error?`));
+                reject(error);
               })
         
     })};    
@@ -60,10 +51,10 @@ export const getCrushNumber = (user) => {
     return new Promise((resolve, reject) => {
         // grab user object or send 404 if not found
         
-        User.findOne({ "email": user }, {"crushNumber":1})
+        User.findOne({ "netid": user }, {"crushingNumber":1})
           .then((foundCrushes) => {
             if (foundCrushes !== null) {
-              resolve(foundCrushes);
+              resolve(foundCrushes["crushingNumber"]);
             } else {
               reject(new Error(`User with email: ${user} not found--testing that this is get crush number`));
             }
@@ -113,7 +104,7 @@ const updateCrushes = (user, crush) => {
         .catch((error) => {
           reject(error);
         });  
-        
+    //this might be an issue--having two resolves 
     const cn = User.findOne({"email": crush}, {"crushingNumber":1})+1;
     User.updateOne({ "email": crush }, {"crushingNumber": cn})
         .then(() => {

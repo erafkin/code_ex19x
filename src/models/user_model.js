@@ -20,7 +20,7 @@ const UserSchema = new Schema({
     middle_name: String,
     crushes: Array,  
     matches: Array,
-
+    crushingNumber: Number,
 }, {collection: "students"});
 
 UserSchema.set('toJSON', {
@@ -28,5 +28,6 @@ UserSchema.set('toJSON', {
 });
 
 const User = mongoose.model('User', UserSchema);
+
 
 export default User;
