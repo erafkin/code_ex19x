@@ -154,7 +154,7 @@ const updateCrushes = (user, crush) => {
     });
   };
 
-
+  
   const updateMatches = (user, match) => {
     return new Promise((resolve, reject) => {
       let matches = User.findOne({"email": user },{"matches":1});
