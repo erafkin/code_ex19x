@@ -1,7 +1,6 @@
 import mongoose, { Schema, ObjectId } from 'mongoose';
 
 const UserSchema = new Schema({
-    _id: { type: String, unique: true },
     legal_prefix: String,
     legal_first_name: String,
     campus_address: String,

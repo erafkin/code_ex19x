@@ -38,14 +38,17 @@ app.use(bodyParser.json());
 
 // database setup
 // const mongoURI = process.env.MONGODB_URI  || 'mongodb://localhost/lc19x';
-// const mongoURI = "mongodb+srv://lc19x:lastchances19x@lc19x-nfyrs.mongodb.net/test?retryWrites=true&w=majority";
-const mongoURI = "mongodb://localhost:27017/lc19x";
+const mongoURI = "mongodb+srv://lc19x:lastchances19x@lc19x-nfyrs.mongodb.net/test?retryWrites=true&w=majority";
+// const mongoURI = "mongodb://localhost:27017/lc19x";
 
 // console.log(process.env.MONGODB_URI);
 console.log(mongoURI);
 
 
-mongoose.connect(mongoURI);
+mongoose.connect(mongoURI,function(err) {
+    if(err) console.log(err);
+     console.log("connection successful");    }
+  );
 // set mongoose promises to es6 default
 mongoose.Promise = global.Promise;
 

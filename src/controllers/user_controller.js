@@ -1,6 +1,8 @@
 import User from '../models/user_model';
 
 
+//TODO: switch out all the find by emails to find by net id
+
 export const getNetid = (payload) =>{
     return new Promise((resolve, reject)=>{
         let name = JSON.stringify(payload);
@@ -25,52 +27,7 @@ export const getNetid = (payload) =>{
                 reject(error);
               })
         
-    })};
-
-    //     // console.log(User.find({"last_name":name[name.length-1]}, 'netid'));
-    //     if(users.length>1){
-    //         users = [];
-    //         users.forEach(function(u){
-    //             //search by first name -- people could have more than 1 first name so use .includes
-    //             if(u["first_name"].includes(names[0])){
-    //                 users.push(u);
-    //             }
-    //         });
-    //         if(users.length>1){
-    //             if(name.length>2){
-    //                  //search by middle name -- people could have more than 1 so use .includes
-
-    //                 users.forEach(function(u){
-    //                     if(u["middle_name"].includes(names[2])){
-    //                         users.push(u);
-    //                     }
-    //                 });
-    //                 if(users.length===1){
-    //                     resolve(users[0]["netid"]);
-    //                 }else{
-    //                     reject(new Error(`user with name ${payload}" not found`));
-    //                 }
-    //             }else{
-    //                 if(users.length===1){
-    //                     // console.log("netid " + users[0]["netid"]);
-    //                     resolve(users[0]["netid"]);
-    //                 }else{
-    //                     reject(new Error(`user with name ${payload}" not found`));
-    //                 }
-    //             }
-    //         }
-            
-    //     }else{
-    //         if(users.length===1){
-    //             // console.log("netid " + users[0]["netid"]);
-    //             resolve(users[0]["netid"]);
-    //         }else{
-    //             reject(new Error(`user with name ${payload}" not found`));
-    //         }
-    //     }
-
-    // });
-    
+    })};    
 
 
 export const getCrushes = (user) => {
