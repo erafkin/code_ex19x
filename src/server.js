@@ -22,8 +22,7 @@ app.use(cors());
 // enable/disable http request logging
 app.use(morgan('dev'));
 
-// enable only if you want templating
-// app.set('view engine', 'ejs');
+
 
 // enable only if you want static assets from folder static
 // app.use(express.static('static'));
@@ -38,7 +37,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // database setup
-const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/lc19x';
+// const mongoURI = process.env.MONGODB_URI  || 'mongodb://localhost/lc19x';
+// const mongoURI = "mongodb+srv://lc19x:lastchances19x@lc19x-nfyrs.mongodb.net/test?retryWrites=true&w=majority";
+const mongoURI = "mongodb://localhost:27017/lc19x";
+
+// console.log(process.env.MONGODB_URI);
+console.log(mongoURI);
+
+
 mongoose.connect(mongoURI);
 // set mongoose promises to es6 default
 mongoose.Promise = global.Promise;

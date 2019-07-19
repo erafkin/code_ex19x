@@ -3,67 +3,83 @@ import User from '../models/user_model';
 
 export const getNetid = (payload) =>{
     return new Promise((resolve, reject)=>{
-        let name = JSON.stringify(payload).split(" ");
-        name[name.length-1]=name[name.length-1].substring(0, name[name.length-1].indexOf('@'));
-        let users = [];
+        let name = JSON.stringify(payload);
+        name = name.replace(".", "");
+        name = name.substring(1, name.length);
+        name=name.substring(0, name.indexOf('@'));
+        name = name.replace(/ /g,".");
         console.log("payload name: " + name);
 
-        //search by last name
-        // users.push(User.find({"last_name":name[name.length-1]}).select("netid"));
-        console.log("now we see if we found the right thing");
-        // console.log(User.find({"last_name":name[name.length-1]}, 'netid'));
-        if(users.length>1){
-            users = [];
-            users.forEach(function(u){
-                //search by first name -- people could have more than 1 first name so use .includes
-                if(u["first_name"].includes(names[0])){
-                    users.push(u);
-                }
-            });
-            if(users.length>1){
-                if(name.length>2){
-                     //search by middle name -- people could have more than 1 so use .includes
 
-                    users.forEach(function(u){
-                        if(u["middle_name"].includes(names[2])){
-                            users.push(u);
-                        }
-                    });
-                    if(users.length===1){
-                        resolve(users[0]["netid"]);
-                    }else{
-                        reject(new Error(`user with name ${payload}" not found`));
-                    }
-                }else{
-                    if(users.length===1){
-                        // console.log("netid " + users[0]["netid"]);
-                        resolve(users[0]["netid"]);
-                    }else{
-                        reject(new Error(`user with name ${payload}" not found`));
-                    }
-                }
-            }
+        User.findOne({ "email" : {$regex: /Emma.P.Rafkin/, '$options':'i'}}, {"netid":1})["netid"]
+
+            .then((foundNetID) =>{
+                if (foundNetID !== null) {
+                    console.log(foundNetID);
+                    resolve(foundNetID);
+                  } else {
+                    reject(new Error(`User with email: ${foundNetID} not found--is this the error?`));
+                  } 
+            })
+            .catch((error) => {
+                reject(error);
+              })
+        
+    })};
+
+    //     // console.log(User.find({"last_name":name[name.length-1]}, 'netid'));
+    //     if(users.length>1){
+    //         users = [];
+    //         users.forEach(function(u){
+    //             //search by first name -- people could have more than 1 first name so use .includes
+    //             if(u["first_name"].includes(names[0])){
+    //                 users.push(u);
+    //             }
+    //         });
+    //         if(users.length>1){
+    //             if(name.length>2){
+    //                  //search by middle name -- people could have more than 1 so use .includes
+
+    //                 users.forEach(function(u){
+    //                     if(u["middle_name"].includes(names[2])){
+    //                         users.push(u);
+    //                     }
+    //                 });
+    //                 if(users.length===1){
+    //                     resolve(users[0]["netid"]);
+    //                 }else{
+    //                     reject(new Error(`user with name ${payload}" not found`));
+    //                 }
+    //             }else{
+    //                 if(users.length===1){
+    //                     // console.log("netid " + users[0]["netid"]);
+    //                     resolve(users[0]["netid"]);
+    //                 }else{
+    //                     reject(new Error(`user with name ${payload}" not found`));
+    //                 }
+    //             }
+    //         }
             
-        }else{
-            if(users.length===1){
-                // console.log("netid " + users[0]["netid"]);
-                resolve(users[0]["netid"]);
-            }else{
-                reject(new Error(`user with name ${payload}" not found`));
-            }
-        }
+    //     }else{
+    //         if(users.length===1){
+    //             // console.log("netid " + users[0]["netid"]);
+    //             resolve(users[0]["netid"]);
+    //         }else{
+    //             reject(new Error(`user with name ${payload}" not found`));
+    //         }
+    //     }
 
-    });
+    // });
     
 
-};
+
 export const getCrushes = (user) => {
     return new Promise((resolve, reject) => {
         // grab user object or send 404 if not found
         
         User.findOne({ "email": user }, {"crushes":1})
           .then((foundCrushes) => {
-            if (foundUser !== null) {
+            if (foundCrushes !== null) {
               resolve(foundCrushes);
             } else {
               reject(new Error(`User with email: ${user} not found`));
