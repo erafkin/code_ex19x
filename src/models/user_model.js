@@ -1,7 +1,7 @@
-import mongoose, { Schema, ObjectId } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
+mongoose.set('debug', true);
 const UserSchema = new Schema({
-    _id: { type: String, unique: true },
     legal_prefix: String,
     legal_first_name: String,
     campus_address: String,
@@ -21,12 +21,12 @@ const UserSchema = new Schema({
     crushes: Array,  
     matches: Array,
 
-}, { _id: false, minimize: false });
+}, {collection: "students"});
 
 UserSchema.set('toJSON', {
   virtuals: true,
 });
 
-const UserModel = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
 
-export default UserModel;
+export default User;
