@@ -15,7 +15,7 @@ export const getNetid = (payload) =>{
         name=name.substring(0, name.indexOf('@'));
         name = name.replace(/ /g,".");
         console.log("payload name: " + name);
-        User.findOne({ "email" : "Emma.P.Rafkin.21@Dartmouth.edu"}, {"netid":1})
+        User.findOne({ "email" : {$regex: name, $options:'i'}}, {"netid":1})
             .then((foundNetID) =>{
                 if (foundNetID !== null) {
                     resolve(foundNetID["netid"]);
@@ -51,10 +51,10 @@ export const getCrushNumber = (user) => {
     return new Promise((resolve, reject) => {
         // grab user object or send 404 if not found
         
-        User.findOne({ "email": user }, {"crushNumber":1})
+        User.findOne({ "netid": user }, {"crushingNumber":1})
           .then((foundCrushes) => {
             if (foundCrushes !== null) {
-              resolve(foundCrushes);
+              resolve(foundCrushes["crushingNumber"]);
             } else {
               reject(new Error(`User with email: ${user} not found--testing that this is get crush number`));
             }

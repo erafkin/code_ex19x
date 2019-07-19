@@ -23,20 +23,26 @@ router.route('/')
         console.log('authed:' + JSON.stringify(user) + ' with ' + JSON.stringify(req.query));
         //search mongo db for user's crushes using user_controller
         let netid = "";
-        UserID.getNetid(user).then((ni)=>{
-                console.log(ni);
-                netid = ni.slice();})        
+        UserID.getNetid(user)
+            .then((ni)=>{
+                    console.log(ni);
+                    netid = ni.slice();
+                    UserID.getCrushNumber(netid)
+                            .then((crushes)=>{
+                                console.log(crushes);
+                                res.render('index', {crushes});
+                            })
+                            .catch((error)=>{
+                                res.status(500).send(error.message);
+                            });
+                
+                })        
             .catch((error)=>{
-            res.status(500).send(error.message);
-        });
-
-        UserID.getCrushNumber(netid)
-            .then((crushes)=>{
-                res.render('index', {crushes});
-            })
-            .catch((error)=>{
+                console.log(error);
                 res.status(500).send(error.message);
-            })
+            });
+        console.log("netid: " + netid);
+        
     })(req, res);
     })
 

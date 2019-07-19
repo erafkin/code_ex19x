@@ -20,7 +20,7 @@ const UserSchema = new Schema({
     middle_name: String,
     crushes: Array,  
     matches: Array,
-
+    crushingNumber: Number,
 }, {collection: "students"});
 
 UserSchema.set('toJSON', {
