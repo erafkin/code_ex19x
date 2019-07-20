@@ -9,7 +9,7 @@ dotenv.config({ silent: true });
 const casOptions = {
   ssoBaseURL: 'https://login.dartmouth.edu/cas',
 //   serverBaseURL: process.env.REDIRECT_URL,
-  serverBaseURL: 'http://localhost:8000/cas',
+  serverBaseURL: 'http://localhost:8000/',
 };
 const casLogin = new cas.Strategy(casOptions, (user, done) => {
   console.log(`payload: ${user}`);

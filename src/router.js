@@ -12,6 +12,9 @@ const router = Router();
 //before any call, we need to call user.getNetid to switch the form from the gross cas thing to the netid
 
 
+router.route('/logout').get((req, res) => {
+  res.send('Thanks for visiting last chances 19x!');
+});
 router.route('/')
     .get((req, res, next)=>{
     passport.authenticate('cas', (err, user, info)=>{

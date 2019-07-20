@@ -48,12 +48,8 @@ app.use(bodyParser.json());
 
 
 
-app.use('/user', router);
+app.use('/', router);
 
-//default endpoint
-app.get('/', (req, res) => {
-  res.send('welcome to last chances 19x');
-});
 
 //endpoint to ping to keep it awake
 app.get('/dev', (req, res) => {
