@@ -86,18 +86,7 @@ export const updateCrushes = (user, crush) => {
 
     return new Promise((resolve, reject) => {
       let crushes = [];
-      User.findOne({ "netid": user }, {"crushes": 1 })
-          .then((foundCrushes) => {
-            if (foundCrushes !== null) {
-              console.log("first "+crushes);
-              crushes = foundCrushes["crushes"];
-              console.log("second "+crushes);
-              console.log("type "+typeof crushes);
-                crushes = JSON.stringify(crushes);
-                crushes = crushes.split(",");
-                crushes = crushes.push(crush);
-                console.log("final "+crushes);
-                User.updateOne({ "netid": user }, {"crushes": crushes})
+                User.updateOne({ "netid": user }, {$push: {"crushes" : crush}})
                     .then(() => {
                     // grab user object or send 404 if not found
                     User.findOne({ "netid": user })
@@ -123,44 +112,39 @@ export const updateCrushes = (user, crush) => {
                             reject(error);
                         });                    
                     }).catch((error)=>reject(new Error(`couldn't find user`))); 
-
-            } else {
-              reject(new Error(`User with netid: ${user} not found`));
-            }
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      
-    //this might be an issue--having two resolves 
-    
+          
     });
   };
 
+export const netidToLegalName = (user) => {
+    return new Promise((resolve, reject)=>{
+        User.findOne({"netid": user},{"legal_name": 1})
+            .then((found)=>{
+                console.log(found["legal_name"]);
+                resolve(found["legal_name"]);
+            }).catch((error)=>{
+                reject(new Error(`User with netid: ${user} not found`));
+            });
+    });
+};
+export const legalNametoNetid = (user) => {
+    return new Promise((resolve, reject)=>{
+        User.findOne({"legal_name": user},{"netid": 1})
+            .then((found)=>{
+                resolve(found["netid"]);
+            }).catch((error)=>{
+                reject(new Error(`User with name: ${user} not found`));
+            });
+    });
+};
   
 export const updateMatches = (user, match) => {
     return new Promise((resolve, reject) => {
-      let matches = User.findOne({"netid": user },{"matches":1});
-      matches.push(match);
-      User.updateOne({ "netid": user }, {"matches": matchArray})
-        .then(() => {
-          // grab user object or send 404 if not found
-          User.findOne({ "netid": user })
-            .then((foundUser) => {
-              if (foundUser !== null) {
-                resolve(foundUser);
-              } else {
-                reject(new Error(`User with netid: ${user} not found`));
-              }
-            })
+      User.updateOne({ "legal_name": user }, {$push: {"matches" : match}})
             .catch((error) => {
               reject(error);
             });
-        })
-        .catch((error) => {
-          reject(error);
         });
-    });
   };
 
 //   export const validateCrushNames=(name)

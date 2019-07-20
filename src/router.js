@@ -101,22 +101,38 @@ router.route('/')
     .post((req, res, next) => {
     //I call it req.body.crush as in that is what I'm assuming will be the crush's id
         let crush = req.body.entry;
-
-        //somehow need to validate that the crush is a real person and get their netid from that--another user_controller method?
-            UserID.getCrushes(netid_final)
+        let crush_id = "";
+        UserID.legalNametoNetid(crush)
+        .then((id)=>{
+            crush_id=id;
+            UserID.getCrushes(crush_id)
                 .then((results) => {
-                    if(results.includes(name_final)){
-                        UserID.updateMatches(netid_final, crush);
-                        UserID.updateMatches(crush, netid_final);
-                        UserID.updateCrushes(netid_final, crush);
-                    }else{
-                        UserID.updateCrushes(netid_final, crush);
-                    }
-                    res.redirect('/');
+                    console.log("crush's crushes " + results);
+                    let user_legal_name = "";
+                    UserID.netidToLegalName(netid_final).then((uln)=>{
+                        user_legal_name = uln;
+                        console.log("user's legal name " + user_legal_name);
+                        if(results.includes(user_legal_name)){
+                            UserID.updateMatches(user_legal_name, crush);
+                            UserID.updateMatches(crush, user_legal_name);
+                            UserID.updateCrushes(netid_final, crush);
+                        }else{
+                            console.log("not a match");
+                            UserID.updateCrushes(netid_final, crush);
+                        }
+                        res.redirect('/');
+                    }).catch((error) => {
+                        res.status(500).send(error.message);
+                    });
+                    
                 })
                 .catch((error) => {
                     res.status(500).send(error.message);
                 })
+        }).catch((error)=>res.status(500).send(error.message));
+
+        //somehow need to validate that the crush is a real person and get their netid from that--another user_controller method?
+            
 
         });
 
