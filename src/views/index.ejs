@@ -43,8 +43,28 @@
                         <% } %> 
      
                     </div>
-            
-            <h2> crushes</h2>
+
+
+                    <form id="entries-form" method="post" action="/crushes">
+                    
+                            <div id="entries-container">
+                              <div class="row">
+                                <p class="col-sm-4 col-sm-offset-4">
+                                  <input id="input-box"class="form-control" name="entry" placeholder="Philip J. Hanlon">
+                                </p>
+                              </div>
+<!--                     
+                            <div class="row" style="margin-bottom:8px;">
+                              <div class="g-recaptcha col-sm-4 col-sm-offset-4"
+                                data-sitekey="6Lcd-gcTAAAAALEa5oV92jQvn6TwzqX5eVCxm3MF"></div>
+                            </div> -->
+                    
+                            <div class="row">
+                              <div class="col-sm-4 col-sm-offset-4">
+                                <input id="submit" type="submit" class="btn btn-primary">
+                              </div>
+                            </div>
+                          </form>
         <script>
         function showCrushes() {
             var x = document.getElementById("crush-list");

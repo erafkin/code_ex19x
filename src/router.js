@@ -19,13 +19,13 @@ router.route('/logout').get((req, res) => {
 
 
 
-//
+//global variables
 let crush_list_final = []; 
 let match_list_final = [];
 let user_final = undefined;
 let netid_final = "";
 let crush_number_final = 0;
-
+let name_final = "";
 router.route('/')
     .get((req, res, next)=>{
 
@@ -87,7 +87,7 @@ router.route('/')
         name = name.slice();
         name = name.substring(1, name.length);
         name=name.substring(0, name.indexOf('@'));
-
+        name_final = name;
         //render the main page!
         res.render('index', {"crushes": crush_number_final, "user": name, "crush_list": crush_list_final, "match_list": match_list_final});
     });
@@ -99,27 +99,25 @@ router.route('/')
     // to update the crushes, matches, and crush number 
     router.route('/crushes')
     .post((req, res, next) => {
-        passport.authenticate('cas', (err, user, info) => {
-            if (err) { return next(err); }
-            if (!user) { return res.redirect('/'); }
-            console.log('authed:' + JSON.stringify(user) + ' with ' + JSON.stringify(req.query));
-//I call it req.body.crush as in that is what I'm assuming will be the crush's id
-            User.getCrushes(req.body.crush)
+    //I call it req.body.crush as in that is what I'm assuming will be the crush's id
+        let crush = req.body.entry;
+
+        //somehow need to validate that the crush is a real person and get their netid from that--another user_controller method?
+            UserID.getCrushes(netid_final)
                 .then((results) => {
-                    if(results.includes(user)){
-                        User.updateMatches(user, req.body.crush);
-                        User.updateMatches(req.body.crush, user);
-                        User.updateCrushes(user, req.body.crush);
+                    if(results.includes(name_final)){
+                        UserID.updateMatches(netid_final, crush);
+                        UserID.updateMatches(crush, netid_final);
+                        UserID.updateCrushes(netid_final, crush);
                     }else{
-                        User.updateCrushes(user, req.body.crush);
+                        UserID.updateCrushes(netid_final, crush);
                     }
-                    res.render('index', { crushes });
+                    res.redirect('/');
                 })
                 .catch((error) => {
                     res.status(500).send(error.message);
                 })
 
-        })(req, res, next);
-    })
+        });
 
 export default router;
