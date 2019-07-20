@@ -37,7 +37,8 @@ export const getCrushes = (user) => {
         User.findOne({ "netid": user }, {"crushes":1})
           .then((foundCrushes) => {
             if (foundCrushes !== null) {
-              resolve(foundCrushes);
+                console.log(foundCrushes);
+              resolve(foundCrushes["crushes"]);
             } else {
               reject(new Error(`User with netid: ${user} not found`));
             }
@@ -67,10 +68,11 @@ export const getCrushNumber = (user) => {
 export const getMatches = (user) => {
     return new Promise((resolve, reject) => {
         // grab user object or send 404 if not found
-        User.findOne({ "email": user }, {"matches":1})
+        User.findOne({ "netid": user }, {"matches":1})
           .then((foundMatches) => {
-            if (foundUser !== null) {
-              resolve(foundMatches);
+            if (foundMatches !== null) {
+              console.log(foundMatches);
+              resolve(foundMatches["matches"]);
             } else {
               reject(new Error(`User with email: ${user} not found`));
             }

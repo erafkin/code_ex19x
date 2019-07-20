@@ -28,15 +28,28 @@ router.route('/')
             .then((ni)=>{
                     console.log(ni);
                     netid = ni.slice();
-                    UserID.getCrushNumber(netid)
+                    UserID.getCrushes(netid).then((crush_list)=>{
+                        UserID.getMatches(netid).then((match_list) =>{
+                            UserID.getCrushNumber(netid)
                             .then((crushes)=>{
                                 console.log(crushes);
-                                res.sendFile(path.join(__dirname+'/views/index.html'));
+                                let name = JSON.stringify(user);
+                                name = name.slice();
+                                user = name.replace(".", "");
+                                name = name.substring(1, name.length);
+                                name=name.substring(0, name.indexOf('@'));
+                                res.render('index', {"crushes": crushes, "user": name, "crush_list": crush_list, "match_list": match_list});
                             })
                             .catch((error)=>{
                                 res.status(500).send(error.message);
                             });
-                
+                        }).catch((error)=>{
+                            res.status(500).send(error.message);
+                        });
+                        
+                    }).catch((error)=>{
+                        res.status(500).send(error.message);
+                    });
                 })        
             .catch((error)=>{
                 console.log(error);
@@ -46,32 +59,6 @@ router.route('/')
         
     })(req, res, next);
     })
-    router.route('/number')
-    .get((req, res, next) => {
-        passport.authenticate('cas', (err, user, info) => {
-            if (err) { return next(err); }
-            if (!user) { return res.redirect('/'); }
-            UserID.getNetid(user)
-            .then((ni)=>{
-                    console.log(ni);
-                    netid = ni.slice();
-                    UserID.getCrushNumber(netid)
-                            .then((crushes)=>{
-                                console.log(crushes);
-                                res.sendFile(path.join(__dirname+'/views/index.html'));
-                            })
-                            .catch((error)=>{
-                                res.status(500).send(error.message);
-                            });
-                
-                })        
-            .catch((error)=>{
-                console.log(error);
-                res.status(500).send(error.message);
-            });
-        })(req, res, next);
-    })
-
     router.route('/crushes')
     .get((req, res, next) => {
         passport.authenticate('cas', (err, user, info) => {
@@ -79,13 +66,19 @@ router.route('/')
             if (!user) { return res.redirect('/'); }
             console.log('authed:' + JSON.stringify(user) + ' with ' + JSON.stringify(req.query));
             //search mongo db for user's crushes using user_controller
-            User.getCrushes(user)
-                .then((crushes) => {
-                    res.render('index', { crushes });
+            UserID.getNetid(user)
+            .then((ni)=>{
+                User.getCrushes(user)
+                    .then((crush_list) => {
+                        res.render('index', { "crush_list": crush_list });
+                    })
+                    .catch((error) => {
+                        res.status(500).send(error.message);
+                    });
                 })
-                .catch((error) => {
-                    res.status(500).send(error.message);
-                })
+            .catch((error)=>{
+                res.status(500).send(error.message);
+            });
         })(req, res, next);
     })
     .post((req, res, next) => {

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <title>Last Chances 19X</title>
+            <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+    </head>
+    <body>
+            <h1>19X - <i>SUMMER LOVIN'</i></h1>
+            <h2>LOGGED IN AS <%= user %> <a href='/'>LOGOUT</a></h2>
+            <p>Your picks are kept private unless you are matched. Matches are done by a compter program. Concerns? Questions? <b>lastchances19x@gmail.com</b></p>
+            <h3><b>HOW TO USE:</b></h3>
+            <ol>
+                <li>Enter names in the boxes, then press <b>submit</b>!</li>
+                <li>You will be taken to a page suggesting <b>full names</b> underneath each box based on the original entry.</li>
+                <li>For each crush, click the <b>link</b> containing the name as it appears in the <b>DND</b>, then hit <b>submit</b> once more!</li>
+              </ol>
+            <p><b>Crush entries cannot be deleted. Choose Carefully!</b></p>
+            <p> There are <%= crushes %> people crushing on you!</p>
+                <button class="btn" id = "crush-btn" type="button" onClick= showCrushes()>
+                        VIEW YOUR CRUSHES
+                </button>
+                <div id = "crush-list" class = "hide">
+                    <% if (crush_list.length > 0) { %>
+                        <% for (var i = 0; i < crush_list.length; i++) { %>
+                                <p><%= crush_list[i] %></p>
+                    <%}} else {%>
+                        <p> You haven't crushed on anyone yet!</p>
+                    <% } %> 
+ 
+                </div>
+
+                <button class="btn" id = "match-btn" type="button" onClick= showMatches()>
+                        VIEW YOUR MATCHES
+                </button>
+                <div id = "match-list" class = "hide">
+                        <% if (match_list.length > 0) { %>
+                            <% for (var i = 0; i < match_list.length; i++) { %>
+                                    <p><%= match_list[i] %></p>
+                        <%}} else {%>
+                            <p> You haven't matched with anyone yet -- keep crushing on people!</p>
+                        <% } %> 
+     
+                    </div>
+            
+            <h2> crushes</h2>
+        <script>
+        function showCrushes() {
+            var x = document.getElementById("crush-list");
+                x.classList.toggle("show");        
+            }
+        function showMatches() {
+            var x = document.getElementById("match-list");
+                x.classList.toggle("show");        
+            }
+
+        </script>
+    </body>
+</html>
