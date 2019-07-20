@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import path from 'path';
 import * as UserID from './controllers/user_controller';
 import passport from './services/passport';
 const router = Router();
@@ -15,7 +16,7 @@ router.route('/')
     .get((req, res)=>{
     passport.authenticate('cas', (err, user, info)=>{
         console.log("user: "+user);
-        if(err){return next(err);}
+        if(err){return err;}
         if(!user){
             console.log("rejected");
             return res.redirect('/');
@@ -30,7 +31,7 @@ router.route('/')
                     UserID.getCrushNumber(netid)
                             .then((crushes)=>{
                                 console.log(crushes);
-                                res.render('index', {crushes});
+                                res.sendFile(path.join(__dirname+'/views/index.html'));
                             })
                             .catch((error)=>{
                                 res.status(500).send(error.message);
