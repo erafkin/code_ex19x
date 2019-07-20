@@ -13,7 +13,7 @@ const router = Router();
 
 
 router.route('/')
-    .get((req, res)=>{
+    .get((req, res, next)=>{
     passport.authenticate('cas', (err, user, info)=>{
         console.log("user: "+user);
         if(err){return err;}
@@ -44,7 +44,32 @@ router.route('/')
             });
         console.log("netid: " + netid);
         
-    })(req, res);
+    })(req, res, next);
+    })
+    router.route('/number')
+    .get((req, res, next) => {
+        passport.authenticate('cas', (err, user, info) => {
+            if (err) { return next(err); }
+            if (!user) { return res.redirect('/'); }
+            UserID.getNetid(user)
+            .then((ni)=>{
+                    console.log(ni);
+                    netid = ni.slice();
+                    UserID.getCrushNumber(netid)
+                            .then((crushes)=>{
+                                console.log(crushes);
+                                res.sendFile(path.join(__dirname+'/views/index.html'));
+                            })
+                            .catch((error)=>{
+                                res.status(500).send(error.message);
+                            });
+                
+                })        
+            .catch((error)=>{
+                console.log(error);
+                res.status(500).send(error.message);
+            });
+        })(req, res, next);
     })
 
     router.route('/crushes')

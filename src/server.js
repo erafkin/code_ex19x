@@ -52,7 +52,7 @@ app.use('/user', router);
 
 //default endpoint
 app.get('/', (req, res) => {
-  res.send('welcome to the last chances 19x database');
+  res.send('welcome to last chances 19x');
 });
 
 //endpoint to ping to keep it awake
