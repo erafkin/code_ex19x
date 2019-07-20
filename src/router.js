@@ -12,36 +12,55 @@ const router = Router();
 //before any call, we need to call user.getNetid to switch the form from the gross cas thing to the netid
 
 
+//lol not actually logging them out because idk how to do that, but just rerouting them--hacks
 router.route('/logout').get((req, res) => {
   res.send('Thanks for visiting last chances 19x!');
 });
+
+
+
+//
+let crush_list_final = []; 
+let match_list_final = [];
+let user_final = undefined;
+let netid_final = "";
+let crush_number_final = 0;
+
 router.route('/')
     .get((req, res, next)=>{
+
+    //cas auth
     passport.authenticate('cas', (err, user, info)=>{
+        user_final = user;
         console.log("user: "+user);
         if(err){return err;}
         if(!user){
             console.log("rejected");
             return res.redirect('/');
         }
+
         console.log('authed:' + JSON.stringify(user) + ' with ' + JSON.stringify(req.query));
-        //search mongo db for user's crushes using user_controller
         let netid = "";
+        //get the net id of the user that CAS returns
         UserID.getNetid(user)
             .then((ni)=>{
-                    console.log(ni);
+                    //do we need to copy this?
                     netid = ni.slice();
+                    //get the list of crushes
                     UserID.getCrushes(netid).then((crush_list)=>{
+                        //get the list of matches
                         UserID.getMatches(netid).then((match_list) =>{
+                            //get number of people crushing on them
                             UserID.getCrushNumber(netid)
                             .then((crushes)=>{
-                                console.log(crushes);
-                                let name = JSON.stringify(user);
-                                name = name.slice();
-                                user = name.replace(".", "");
-                                name = name.substring(1, name.length);
-                                name=name.substring(0, name.indexOf('@'));
-                                res.render('index', {"crushes": crushes, "user": name, "crush_list": crush_list, "match_list": match_list});
+                                //save everything to the global variables
+                                netid_final = netid;
+                                crush_list_final = crush_list;
+                                match_list_final = match_list;
+                                crush_number_final = crushes;
+
+                                //redirect them!
+                                res.redirect('/main');
                             })
                             .catch((error)=>{
                                 res.status(500).send(error.message);
@@ -55,35 +74,30 @@ router.route('/')
                     });
                 })        
             .catch((error)=>{
-                console.log(error);
                 res.status(500).send(error.message);
             });
-        console.log("netid: " + netid);
-        
     })(req, res, next);
     })
+
+
+    //this is the main page that will actualy display, otherwise the CAS auth ticket is still in the url and you can't reload which is annoying
+    router.route('/main').get((req, res)=>{
+        //format the name that is the CAS response
+        let name = JSON.stringify(user_final);
+        name = name.slice();
+        name = name.substring(1, name.length);
+        name=name.substring(0, name.indexOf('@'));
+
+        //render the main page!
+        res.render('index', {"crushes": crush_number_final, "user": name, "crush_list": crush_list_final, "match_list": match_list_final});
+    });
+
+
+
+
+    //ONLY A POST ENDPOINT
+    // to update the crushes, matches, and crush number 
     router.route('/crushes')
-    .get((req, res, next) => {
-        passport.authenticate('cas', (err, user, info) => {
-            if (err) { return next(err); }
-            if (!user) { return res.redirect('/'); }
-            console.log('authed:' + JSON.stringify(user) + ' with ' + JSON.stringify(req.query));
-            //search mongo db for user's crushes using user_controller
-            UserID.getNetid(user)
-            .then((ni)=>{
-                User.getCrushes(user)
-                    .then((crush_list) => {
-                        res.render('index', { "crush_list": crush_list });
-                    })
-                    .catch((error) => {
-                        res.status(500).send(error.message);
-                    });
-                })
-            .catch((error)=>{
-                res.status(500).send(error.message);
-            });
-        })(req, res, next);
-    })
     .post((req, res, next) => {
         passport.authenticate('cas', (err, user, info) => {
             if (err) { return next(err); }
@@ -108,22 +122,4 @@ router.route('/')
         })(req, res, next);
     })
 
-
-router.route('/matches')
-    .get((req, res, next)=>{
-        passport.authenticate('cas', (err, user, info)=>{
-            if(err){return next(err);}
-            if(!user){return res.redirect('/');}
-            console.log('authed:' + JSON.stringify(user) + ' with ' + JSON.stringify(req.query));
-
-            //search mongo db for user's crushes using user_controller
-            UserID.getMatches(user)
-                .then((response)=>{
-                    res.send(response);
-                })
-                .catch((error)=>{
-                    res.status(500).send(error.message);
-                })
-        })(req, res, next);
-        })
 export default router;

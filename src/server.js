@@ -17,11 +17,11 @@ mongoose.connect(mongoURI,{ useNewUrlParser: true });
 
 mongoose.connection.on("open", function(ref) {
 
-    console.log("Connected to mongo server--but have we really?");
+    console.log("Connected to mongo");
   });
   
   mongoose.connection.on("error", function(err) {
-    console.log("Could not connect to mongo server! ");
+    console.log("Could not connect to mongo! ");
     return console.log(err);
   });
 // set mongoose promises to es6 default
@@ -58,7 +58,7 @@ app.get('/dev', (req, res) => {
 
 // ping the server every 20 minutes so heroku stays awake
 
-//NEED TO PUT IN OUR SERVER NAME
+//TODO: NEED TO PUT IN OUR SERVER NAME (and uncomment that line)
 setInterval(() => {
 //   axios.get('https://our-url/dev');
 }, 1200000); // every 5 minutes (300000)

@@ -1,6 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
 
-mongoose.set('debug', true);
 const UserSchema = new Schema({
     legal_prefix: String,
     legal_first_name: String,

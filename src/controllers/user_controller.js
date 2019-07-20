@@ -14,7 +14,6 @@ export const getNetid = (payload) =>{
         name = name.substring(1, name.length);
         name=name.substring(0, name.indexOf('@'));
         name = name.replace(/ /g,".");
-        console.log("payload name: " + name);
         User.findOne({ "email" : {$regex: name, $options:'i'}}, {"netid":1})
             .then((foundNetID) =>{
                 if (foundNetID !== null) {
@@ -37,7 +36,6 @@ export const getCrushes = (user) => {
         User.findOne({ "netid": user }, {"crushes":1})
           .then((foundCrushes) => {
             if (foundCrushes !== null) {
-                console.log(foundCrushes);
               resolve(foundCrushes["crushes"]);
             } else {
               reject(new Error(`User with netid: ${user} not found`));
@@ -71,7 +69,6 @@ export const getMatches = (user) => {
         User.findOne({ "netid": user }, {"matches":1})
           .then((foundMatches) => {
             if (foundMatches !== null) {
-              console.log(foundMatches);
               resolve(foundMatches["matches"]);
             } else {
               reject(new Error(`User with email: ${user} not found`));
