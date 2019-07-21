@@ -58,7 +58,7 @@ app.get('/dev', (req, res) => {
 
 // ping the server every 20 minutes so heroku stays awake
 
-//TODO: NEED TO PUT IN OUR SERVER NAME (and uncomment that line)
+//TODO: NEED TO PUT IN OUR SERVER NAME (and uncomment that)
 setInterval(() => {
 //   axios.get('https://our-url/dev');
 }, 1200000); // every 5 minutes (300000)
