@@ -60,7 +60,7 @@ router.route('/')
                                 crush_number_final = crushes;
 
                                 //redirect them!
-                                res.redirect('/main');
+                                res.redirect('/entry');
                             })
                             .catch((error)=>{
                                 res.status(500).send(error.message);
@@ -81,15 +81,20 @@ router.route('/')
 
 
     //this is the main page that will actualy display, otherwise the CAS auth ticket is still in the url and you can't reload which is annoying
-    router.route('/main').get((req, res)=>{
+    router.route('/entry').get((req, res)=>{
         //format the name that is the CAS response
-        let name = JSON.stringify(user_final);
-        name = name.slice();
-        name = name.substring(1, name.length);
-        name=name.substring(0, name.indexOf('@'));
-        name_final = name;
-        //render the main page!
-        res.render('index', {"crushes": crush_number_final, "user": name, "crush_list": crush_list_final, "match_list": match_list_final});
+        if(user_final===undefined){
+            res.redirect("/");
+        }else{
+            let name = JSON.stringify(user_final);
+            name = name.slice();
+            name = name.substring(1, name.length);
+            name=name.substring(0, name.indexOf('@'));
+            name_final = name;
+            //render the main page!
+            res.render('index', {"crushes": crush_number_final, "user": name, "crush_list": crush_list_final, "match_list": match_list_final});
+        }
+        
     });
 
 
