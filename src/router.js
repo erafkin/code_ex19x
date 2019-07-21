@@ -2,6 +2,7 @@ import { Router } from 'express';
 import path from 'path';
 import * as UserID from './controllers/user_controller';
 import passport from './services/passport';
+import User from './models/user_model';
 const router = Router();
 
 
@@ -135,5 +136,6 @@ router.route('/')
             
 
         });
+
 
 export default router;

@@ -147,6 +147,7 @@ export const legalNametoNetid = (user) => {
             });
     });
 };
+
   
 
 
