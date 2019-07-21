@@ -96,7 +96,6 @@ export const updateCrushes = (user, crush) => {
                             User.findOne({"legal_name": crush}, {"crushingNumber":1})
                                 .then((number) => {
                                     cn = number["crushingNumber"];
-                    
                                     cn++;
                                     User.updateOne({ "legal_name": crush }, {"crushingNumber": cn})
                                         .catch((error) => {
@@ -115,6 +114,17 @@ export const updateCrushes = (user, crush) => {
           
     });
   };
+  export const updateMatches = (user, match) => {
+    return new Promise((resolve, reject) => {
+      User.updateOne({ "legal_name": user }, {$push: {"matches" : match}})
+            .catch((error) => {
+              reject(error);
+            });
+        });
+  };
+
+
+//getting different identifiers of the same person depending on what call we are trying to make
 
 export const netidToLegalName = (user) => {
     return new Promise((resolve, reject)=>{
@@ -138,14 +148,6 @@ export const legalNametoNetid = (user) => {
     });
 };
   
-export const updateMatches = (user, match) => {
-    return new Promise((resolve, reject) => {
-      User.updateOne({ "legal_name": user }, {$push: {"matches" : match}})
-            .catch((error) => {
-              reject(error);
-            });
-        });
-  };
 
-//   export const validateCrushNames=(name)
+
   

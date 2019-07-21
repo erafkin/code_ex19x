@@ -25,7 +25,8 @@ let match_list_final = [];
 let user_final = undefined;
 let netid_final = "";
 let crush_number_final = 0;
-let name_final = "";
+
+//main call, get all of the info that we will need to display and save them as variables.
 router.route('/')
     .get((req, res, next)=>{
 
@@ -38,8 +39,6 @@ router.route('/')
             console.log("rejected");
             return res.redirect('/');
         }
-
-        console.log('authed:' + JSON.stringify(user) + ' with ' + JSON.stringify(req.query));
         let netid = "";
         //get the net id of the user that CAS returns
         UserID.getNetid(user)
@@ -90,7 +89,6 @@ router.route('/')
             name = name.slice();
             name = name.substring(1, name.length);
             name=name.substring(0, name.indexOf('@'));
-            name_final = name;
             //render the main page!
             res.render('index', {"crushes": crush_number_final, "user": name, "crush_list": crush_list_final, "match_list": match_list_final});
         }
@@ -112,17 +110,14 @@ router.route('/')
             crush_id=id;
             UserID.getCrushes(crush_id)
                 .then((results) => {
-                    console.log("crush's crushes " + results);
                     let user_legal_name = "";
                     UserID.netidToLegalName(netid_final).then((uln)=>{
                         user_legal_name = uln;
-                        console.log("user's legal name " + user_legal_name);
                         if(results.includes(user_legal_name)){
                             UserID.updateMatches(user_legal_name, crush);
                             UserID.updateMatches(crush, user_legal_name);
                             UserID.updateCrushes(netid_final, crush);
                         }else{
-                            console.log("not a match");
                             UserID.updateCrushes(netid_final, crush);
                         }
                         res.redirect('/');

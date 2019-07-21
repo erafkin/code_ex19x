@@ -12,7 +12,6 @@ const casOptions = {
   serverBaseURL: 'http://localhost:8000/cas',
 };
 const casLogin = new cas.Strategy(casOptions, (user, done) => {
-  console.log(`payload: ${user}`);
   return done(null, user);
 });
 // Tell passport to use this strategy
