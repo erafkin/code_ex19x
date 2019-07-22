@@ -31,7 +31,14 @@
                 });
                 $("#input-box").autocomplete({
                     source: availableTags,
-                    minLength: 3
+                    minLength: 2,
+                    select: function(event, ui) {
+                        $('#submit').prop('disabled', false);
+                    },
+                    search: function( event, ui ) {
+                        $('#submit').prop('disabled', true);
+                    }
+
                 });
 
                 $.ui.autocomplete.filter = function (array, term) {
@@ -49,15 +56,14 @@
     <body>
             <h1>LAST CHANCES 19X - <i>SUMMER LOVIN'</i></h1>
             <h3>LOGGED IN AS <%= user %> <a href='/logout'>LOGOUT</a></h3>
-            <p>Your picks are kept private unless you are matched. Matches are done by a compter program. Concerns? Questions? Site is down? <b>lastchances19x@gmail.com</b> </p>
+            <p>Your picks are kept private unless you are matched. Matches are done by a compter program. Concerns? Questions? <i>Site is down</i>? <b>lastchances19x@gmail.com</b> </p>
             <div class = "rules">
                 <h3><b>HOW TO USE:</b></h3>
                 <ol>
                     <li>Enter a name in the box</li>
-                    <li>Select the correct name from the drop down. If you don't, it won't go through</li>
+                    <li>Select the correct name from the drop down. <b>If you don't select a name from the dropdown, you won't be able to submit</b></li>
                     <li>Select the reCAPTCHA box. IF YOU DON'T SELECT THE RECAPTCHA BOX BEFORE SUBMIT YOUR CRUSH WILL NOT BE SUBMITTED</li>
                     <li>Hit <b>submit</b>!</li>
-
                 </ol>
                 <p><b>Crush entries cannot be deleted. Choose Carefully!</b></p>
             </div>
@@ -109,7 +115,7 @@
                             <div class="row">
                               <div class="col-sm-4 col-sm-offset-4">
                                     <div class="g-recaptcha" data-sitekey="6LeLx64UAAAAAN4u_cKRf2O3SaGBWVYzjKkJYk1z"></div><br>
-                                <input id="submit" type="submit" class="btn btn-primary">
+                                <input id="submit" type="submit" class="btn btn-primary" disabled= true>
                               </div>
                             </div>
                           </form>

@@ -49,7 +49,6 @@ router.route('/')
                             UserID.getCrushNumber(netid)
                             .then((crushes)=>{
                                 //save everything to the global variables
-                                console.log("does this happen");
                                 netid_final = netid;
                                 crush_list_final = crush_list;
                                 match_list_final = match_list;
