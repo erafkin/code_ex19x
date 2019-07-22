@@ -138,11 +138,11 @@ router.route('/')
                                         if(results.includes(user_legal_name)){
                                             UserID.updateMatches(user_legal_name, crush);
                                             UserID.updateMatches(crush, user_legal_name);
-                                            UserID.updateCrushes(req.session["netid_final"], crush);
+                                            UserID.updateCrushes(req.session["netid_final"], crush).then(res.redirect('/'));
                                         }else{
-                                            UserID.updateCrushes(req.session["netid_final"], crush);
+                                            UserID.updateCrushes(req.session["netid_final"], crush).then(res.redirect('/'));
                                         }
-                                        res.redirect('/');
+                                        
                                     }).catch((error) => {
                                         res.status(500).send(error.message);
                                     });
