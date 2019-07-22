@@ -11,8 +11,15 @@ export const getNetid = (payload) =>{
         name = name.slice();
         name = name.replace(".", "");
         name = name.substring(1, name.length);
-        name=name.substring(0, name.indexOf('@'));
+        var num = name.match(/\d+/g);
+        if (num != null) {
+            name=name.substring(0, name.indexOf('@')-2);
+
+        }else{
+            name=name.substring(0, name.indexOf('@'));
+        }
         name = name.replace(/ /g,".");
+
         User.findOne({ "email" : {$regex: name, $options:'i'}}, {"netid":1})
             .then((foundNetID) =>{
                 if (foundNetID !== null) {
