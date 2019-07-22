@@ -161,4 +161,8 @@ router.route('/')
                         });
     });
 
+
+    router.route('/temp').get((req, res) => {
+        UserID.getDaNames().then((found)=>{res.send(found)});
+    });
 export default router;

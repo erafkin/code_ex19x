@@ -12,7 +12,7 @@ export const getNetid = (payload) =>{
         name = name.replace(".", "");
         name = name.substring(1, name.length);
         var num = /\d/.test(name);
-        if (num != null) {
+        if (num) {
             name=name.substring(0, name.indexOf('@')-2);
 
         }else{
@@ -146,6 +146,17 @@ export const legalNametoNetid = (user) => {
         User.findOne({"legal_name": user},{"netid": 1})
             .then((found)=>{
                 resolve(found["netid"]);
+            }).catch((error)=>{
+                reject(new Error(`User with name: ${user} not found`));
+            });
+    });
+};
+
+export const getDaNames= () =>{
+    return new Promise((resolve, reject)=>{
+        User.find({},{"legal_name": 1})
+            .then((found)=>{
+                resolve(found);
             }).catch((error)=>{
                 reject(new Error(`User with name: ${user} not found`));
             });
