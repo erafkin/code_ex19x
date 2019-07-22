@@ -46,8 +46,6 @@ app.set('views', path.join(__dirname, '../src/views'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
-
 app.use('/', router);
 
 
@@ -60,7 +58,7 @@ app.get('/dev', (req, res) => {
 
 //TODO: NEED TO PUT IN OUR SERVER NAME (and uncomment that)
 setInterval(() => {
-//   axios.get('https://our-url/dev');
+  axios.get('http://last-chances-19x.herokuapp.com/dev');
 }, 1200000); // every 5 minutes (300000)
 
 // START THE SERVER

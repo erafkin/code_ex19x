@@ -2,7 +2,6 @@ import User from '../models/user_model';
 import { model } from 'mongoose';
 
 
-//TODO: switch out all the find by emails to find by net id
 
 
 //returns the netid of the user based on the payload
