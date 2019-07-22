@@ -49,15 +49,21 @@ router.route('/')
                             UserID.getCrushNumber(netid)
                             .then((crushes)=>{
                                 //save everything to the global variables
+                                console.log("does this happen");
                                 netid_final = netid;
                                 crush_list_final = crush_list;
                                 match_list_final = match_list;
                                 crush_number_final = crushes;
                                 req.session["netid_final"] = netid_final;
+                                console.log(req.session["crush_list_final"]);
                                 req.session["crush_list_final"] = crush_list_final;
+                                console.log(req.session["crush_list_final"]);
+
                                 req.session["crush_number_final"] = crush_number_final;
                                 req.session["match_list_final"] = match_list_final;
-
+                                req.session.save(function(err) {
+                                    // session updated
+                                  })
 
 
                                 //redirect them!

@@ -84,7 +84,6 @@ export const getMatches = (user) => {
 export const updateCrushes = (user, crush) => {
 
     return new Promise((resolve, reject) => {
-      let crushes = [];
                 User.updateOne({ "netid": user }, {$push: {"crushes" : crush}})
                     .then(() => {
                     // grab user object or send 404 if not found
