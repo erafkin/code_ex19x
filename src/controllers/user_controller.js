@@ -18,7 +18,7 @@ export const getNetid = (payload) =>{
                 if (foundNetID !== null) {
                     resolve(foundNetID["netid"]);
                   } else {
-                    reject(new Error(`User with email: ${foundNetID["netid"]} not found--is this the error?`));
+                    reject(new Error(`User with netid: ${foundNetID["netid"]} not found--is this the error?`));
                   } 
             })
             .catch((error) => {
@@ -55,7 +55,7 @@ export const getCrushNumber = (user) => {
             if (foundCrushes !== null) {
               resolve(foundCrushes["crushingNumber"]);
             } else {
-              reject(new Error(`User with email: ${user} not found--testing that this is get crush number`));
+              reject(new Error(`User with netid: ${user} not found`));
             }
           })
           .catch((error) => {
@@ -71,7 +71,7 @@ export const getMatches = (user) => {
             if (foundMatches !== null) {
               resolve(foundMatches["matches"]);
             } else {
-              reject(new Error(`User with email: ${user} not found`));
+              reject(new Error(`User with netid: ${user} not found`));
             }
           })
           .catch((error) => {
@@ -84,31 +84,36 @@ export const getMatches = (user) => {
 export const updateCrushes = (user, crush) => {
 
     return new Promise((resolve, reject) => {
+        User.findOne({"netid": user}, {"crushes":1}).then((found)=>{
+            if(found["crushes"].contains(crush)){
                 User.updateOne({ "netid": user }, {$push: {"crushes" : crush}})
-                    .then(() => {
-                    // grab user object or send 404 if not found
-                    User.findOne({ "netid": user })
-                        .then((foundUser) => {
-                        if (foundUser !== null) {
-                            let cn = 0;
-                            User.findOne({"legal_name": crush}, {"crushingNumber":1})
-                                .then((number) => {
-                                    cn = number["crushingNumber"];
-                                    cn++;
-                                    User.updateOne({"legal_name": crush }, {"crushingNumber": cn})
-                                        .catch((error) => {
-                                            reject(error);
-                                        });  
-                                    })
-                                .catch((error)=>{reject(new Error(`User with netid: ${user} not found`));})
-                            } else {
-                                reject(new Error(`User with netid: ${user} not found`));
-                            }
-                        })
-                        .catch((error) => {
-                            reject(error);
-                        });                    
-                    }).catch((error)=>reject(new Error(`couldn't find user`))); 
+                .then(() => {
+                // grab user object or send 404 if not found
+                User.findOne({ "netid": user })
+                    .then((foundUser) => {
+                    if (foundUser !== null) {
+                        let cn = 0;
+                        User.findOne({"legal_name": crush}, {"crushingNumber":1})
+                            .then((number) => {
+                                cn = number["crushingNumber"];
+                                cn++;
+                                User.updateOne({"legal_name": crush }, {"crushingNumber": cn})
+                                    .catch((error) => {
+                                        reject(error);
+                                    });  
+                                })
+                            .catch((error)=>{reject(new Error(`User with netid: ${user} not found`));})
+                        } else {
+                            reject(new Error(`User with netid: ${user} not found`));
+                        }
+                    })
+                    .catch((error) => {
+                        reject(error);
+                    });                    
+                }).catch((error)=>reject(new Error(`couldn't find user`))); 
+            }
+        }).catch((error)=>reject(new Error(`couldn't find user`))); 
+               
           
     });
   };
