@@ -95,7 +95,7 @@ export const updateCrushes = (user, crush) => {
                                 .then((number) => {
                                     cn = number["crushingNumber"];
                                     cn++;
-                                    User.updateOne({ "legal_name": crush }, {"crushingNumber": cn})
+                                    User.updateOne({"legal_name": crush }, {"crushingNumber": cn})
                                         .catch((error) => {
                                             reject(error);
                                         });  

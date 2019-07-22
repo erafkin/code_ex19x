@@ -4,6 +4,7 @@ import cors from 'cors';
 import path from 'path';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
+const http = require('http');
 
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
@@ -64,9 +65,9 @@ app.get('/dev', (req, res) => {
 // ping the server every 20 minutes so heroku stays awake
 
 //TODO: NEED TO PUT IN OUR SERVER NAME (and uncomment that)
-setInterval(() => {
-  axios.get('http://last-chances-19x.herokuapp.com/dev');
-}, 1200000); // every 5 minutes (300000)
+setInterval(function() {
+    http.get("http://shielded-forest-62241.herokuapp.com");
+  }, 1200000); // every 5 minutes (300000)
 
 // START THE SERVER
 // =============================================================================
