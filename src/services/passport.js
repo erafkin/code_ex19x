@@ -8,8 +8,8 @@ dotenv.config({ silent: true });
 
 const casOptions = {
   ssoBaseURL: 'https://login.dartmouth.edu/cas',
-//   serverBaseURL: "http://last-chances-19x.herokuapp.com/cas"
-  serverBaseURL: 'http://localhost:3000/cas',
+  serverBaseURL: "http://last-chances-19x.herokuapp.com/cas"
+//   serverBaseURL: 'http://localhost:3000/cas',
 };
 const casLogin = new cas.Strategy(casOptions, (user, done) => {
   return done(null, user);
