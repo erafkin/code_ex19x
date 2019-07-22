@@ -11,7 +11,7 @@ export const getNetid = (payload) =>{
         name = name.slice();
         name = name.replace(".", "");
         name = name.substring(1, name.length);
-        var num = name.match(/\d+/g);
+        var num = /\d/.test(name);
         if (num != null) {
             name=name.substring(0, name.indexOf('@')-2);
 
