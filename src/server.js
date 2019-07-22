@@ -4,11 +4,19 @@ import cors from 'cors';
 import path from 'path';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
-import { isBuffer } from 'util';
+
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+const app = express();
+
+
+app.use(cookieParser());
+app.use(session({secret: "123456789p0"}));
 
 import router from './router';
 
 require('dotenv').config(); // load environment variables
+
 
 // database setup
 // || 'mongodb://localhost/lc19x';
@@ -28,7 +36,6 @@ mongoose.connection.on("open", function(ref) {
 mongoose.Promise = global.Promise;
 
 // initialize
-const app = express();
 
 // enable/disable cross origin resource sharing if necessary
 app.use(cors());

@@ -15,7 +15,6 @@ router.route('/logout').get((req, res) => {
 
 
 
-
 //main call, get all of the info that we will need to display and save them as variables.
 router.route('/')
     .get((req, res, next)=>{
@@ -29,6 +28,7 @@ router.route('/')
     //cas auth
     passport.authenticate('cas', (err, user, info)=>{
         user_final = user;
+        req.session["user_final"] = user_final;
         console.log("user: "+user);
         if(err){return err;}
         if(!user){
@@ -53,9 +53,15 @@ router.route('/')
                                 crush_list_final = crush_list;
                                 match_list_final = match_list;
                                 crush_number_final = crushes;
+                                req.session["netid_final"] = netid_final;
+                                req.session["crush_list_final"] = crush_list_final;
+                                req.session["crush_number_final"] = crush_number_final;
+                                req.session["match_list_final"] = match_list_final;
+
+
 
                                 //redirect them!
-                                res.redirect('/entry', {"netid_final":netid_final, "crush_list_final":crush_list_final, "match_list_final":match_list_final, "crush_number_final":crush_number_final});
+                                res.redirect('/entry');
                             })
                             .catch((error)=>{
                                 res.status(500).send(error.message);
@@ -78,15 +84,15 @@ router.route('/')
     //this is the main page that will actualy display, otherwise the CAS auth ticket is still in the url and you can't reload which is annoying
     router.route('/entry').get((req, res)=>{
         //format the name that is the CAS response
-        if(user_final===undefined){
+        if(req.session["user_final"]===undefined){
             res.redirect("/");
         }else{
-            let name = JSON.stringify(user_final);
+            let name = JSON.stringify(req.session["user_final"]);
             name = name.slice();
             name = name.substring(1, name.length);
             name=name.substring(0, name.indexOf('@'));
             //render the main page!
-            res.render('index', {"crushes": crush_number_final, "user": name, "crush_list": crush_list_final, "match_list": match_list_final});
+            res.render('index', {"crushes": req.session["crush_number_final"], "user": name, "crush_list": req.session["crush_list_final"], "match_list": req.session["match_list_final"]});
         }
         
     });
@@ -98,18 +104,6 @@ router.route('/')
     // to update the crushes, matches, and crush number 
     router.route('/crushes')
     .post((req, res, next) => {
-        passport.authenticate('cas', (err, user, info)=>{
-            user_final = user;
-            console.log("user: "+user);
-            if(err){return err;}
-            if(!user){
-                console.log("rejected");
-                return res.redirect('/');
-            }
-            let netid = "";
-            //get the net id of the user that CAS returns
-            UserID.getNetid(user)
-                .then((ni)=>{
             //I call it req.body.crush as in that is what I'm assuming will be the crush's id
                 let crush = req.body.entry;
                 let crush_id = "";
@@ -134,14 +128,14 @@ router.route('/')
                                 res.redirect('/');
                                 }else{
                                     let user_legal_name = "";
-                                    UserID.netidToLegalName(netid_final).then((uln)=>{
+                                    UserID.netidToLegalName(req.session["netid_final"]).then((uln)=>{
                                         user_legal_name = uln;
                                         if(results.includes(user_legal_name)){
                                             UserID.updateMatches(user_legal_name, crush);
                                             UserID.updateMatches(crush, user_legal_name);
-                                            UserID.updateCrushes(netid_final, crush);
+                                            UserID.updateCrushes(req.session["netid_final"], crush);
                                         }else{
-                                            UserID.updateCrushes(netid_final, crush);
+                                            UserID.updateCrushes(req.session["netid_final"], crush);
                                         }
                                         res.redirect('/');
                                     }).catch((error) => {
@@ -159,10 +153,6 @@ router.route('/')
                         .catch((error) => {
                             res.status(500).send(error.message);
                         });
-                    }).catch((error) => {
-                        res.status(500).send(error.message);
-                    });
-        });
     });
 
 export default router;
