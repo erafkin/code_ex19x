@@ -8,7 +8,6 @@
     "start": "nodemon --exec babel-node src/server.js",
     "build": "babel src -d dist",
     "prod": "npm build; node dist/server.js"
-
   },
   "repository": {
     "type": "git",
@@ -22,6 +21,7 @@
   "homepage": "https://github.com/erafkin/code_ex19x#readme",
   "dependencies": {
     "@babel/preset-env": "^7.5.5",
+    "babel-cli": "^6.26.0",
     "babel-loader": "^8.0.6",
     "babel-polyfill": "^6.26.0",
     "body-parser": "^1.19.0",
