@@ -12,6 +12,17 @@
   
             <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
             <link rel="stylesheet" href="/resources/demos/style.css">
+            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+            <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+            <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+            <!-- <script type="text/javascript">
+                var onloadCallback = function() {
+                  grecaptcha.render('html_element', {
+                    'sitekey' : '6LeLx64UAAAAAN4u_cKRf2O3SaGBWVYzjKkJYk1z'
+                  });
+                };
+              </script> -->
+
             <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
             <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
             <script>
@@ -42,7 +53,7 @@
 
     </head>
     <body>
-            <h1>19X - <i>SUMMER LOVIN'</i></h1>
+            <h1>LAST CHANCES 19X - <i>SUMMER LOVIN'</i></h1>
             <h3>LOGGED IN AS <%= user %> <a href='/logout'>LOGOUT</a></h3>
             <p>Your picks are kept private unless you are matched. Matches are done by a compter program. Concerns? Questions? Site is down? <b>lastchances19x@gmail.com</b> </p>
             <div class = "rules">
@@ -50,7 +61,9 @@
                 <ol>
                     <li>Enter a name in the box, then press <b>submit</b>!</li>
                     <li>You will be taken to a page suggesting <b>full names</b> underneath each box based on the original entry.</li>
-                    <li>For each crush, click the <b>link</b> containing the name as it appears in the <b>DND</b>, then hit <b>submit</b> once more!</li>
+                    <li>For each crush, click the <b>link</b> containing the name as it appears in the <b>DND</b>, select the reCAPTCHA box, then hit <b>submit</b> once more!</li>
+                    <li>IF YOU DON'T SELECT THE RECAPTCHA BOX YOUR CRUSH WILL NOT BE SUBMITTED/li>
+
                 </ol>
                 <p><b>Crush entries cannot be deleted. Choose Carefully!</b></p>
             </div>
@@ -94,20 +107,35 @@
                                   <input id="input-box"class="form-control" name="entry" placeholder="Philip J. Hanlon">
                                 </p>
                               </div>
-<!--                     
-                            <div class="row" style="margin-bottom:8px;">
-                              <div class="g-recaptcha col-sm-4 col-sm-offset-4"
-                                data-sitekey="6Lcd-gcTAAAAALEa5oV92jQvn6TwzqX5eVCxm3MF"></div>
-                            </div> -->
                     
                             <div class="row">
                               <div class="col-sm-4 col-sm-offset-4">
+                                    <div class="g-recaptcha" data-sitekey="6LeLx64UAAAAAN4u_cKRf2O3SaGBWVYzjKkJYk1z"></div><br>
                                 <input id="submit" type="submit" class="btn btn-primary">
                               </div>
                             </div>
                           </form>
+
+
                 </div>
-                <img src = "/img/love-trees.png" alt = "wow lone pines love each other"/>
+                <img src = "/img/finallctrees.png" alt = "wow lone pines love each other"/>
+
+                <script>
+                $(document).ready(function() {
+                $('#submit').submit(function() {
+                    $(this).ajaxSubmit({
+                    error: function(xhr) {
+                        status('Error: ' + xhr.status);
+                    },
+                    success: function(response) {
+                    console.log(response);
+                    }
+                    });
+                    //Very important line, it disable the page refresh.
+                    return false;
+                });
+                });
+            </script>
         <script>
         function showCrushes() {
             var x = document.getElementById("crush-list");

@@ -1,19 +1,13 @@
 import { Router } from 'express';
-import path from 'path';
 import * as UserID from './controllers/user_controller';
 import passport from './services/passport';
-import User from './models/user_model';
+
+
+var request = require('request');
 const router = Router();
 
 
-//FIX:
-//CAS is sending through the user in the form of --Emma P. Rafkin@DARTMOUTH.EDU--
-//this is not helpful and doesnt really match to anything. we need to figure out how to get the server to send the netid or email 
 
-//before any call, we need to call user.getNetid to switch the form from the gross cas thing to the netid
-
-
-//lol not actually logging them out because idk how to do that, but just rerouting them--hacks
 router.route('/logout').get((req, res) => {
   res.send('Thanks for visiting last chances 19x!');
 });
@@ -111,17 +105,39 @@ router.route('/')
             crush_id=id;
             UserID.getCrushes(crush_id)
                 .then((results) => {
-                    let user_legal_name = "";
-                    UserID.netidToLegalName(netid_final).then((uln)=>{
-                        user_legal_name = uln;
-                        if(results.includes(user_legal_name)){
-                            UserID.updateMatches(user_legal_name, crush);
-                            UserID.updateMatches(crush, user_legal_name);
-                            UserID.updateCrushes(netid_final, crush);
-                        }else{
-                            UserID.updateCrushes(netid_final, crush);
-                        }
+                    
+                    if(req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
                         res.redirect('/');
+                      }
+                      // Put your secret key here.
+                      var secretKey = process.env.SECRET_KEY;
+                      // req.connection.remoteAddress will provide IP address of connected user.
+                      var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
+                      // Hitting GET request to the URL, Google will respond with success or error scenario.
+                      request(verificationUrl,function(error,response,body) {
+                        body = JSON.parse(body);
+                        // Success will be true or false depending upon captcha validation.
+                        if(body.success !== undefined && !body.success) {
+                          res.redirect('/');
+                        }else{
+                            let user_legal_name = "";
+                            UserID.netidToLegalName(netid_final).then((uln)=>{
+                                user_legal_name = uln;
+                                if(results.includes(user_legal_name)){
+                                    UserID.updateMatches(user_legal_name, crush);
+                                    UserID.updateMatches(crush, user_legal_name);
+                                    UserID.updateCrushes(netid_final, crush);
+                                }else{
+                                    UserID.updateCrushes(netid_final, crush);
+                                }
+                                res.redirect('/');
+                            }).catch((error) => {
+                                res.status(500).send(error.message);
+                            });
+                        }
+                    });
+                    
+                    
                     }).catch((error) => {
                         res.status(500).send(error.message);
                     });
@@ -129,13 +145,7 @@ router.route('/')
                 })
                 .catch((error) => {
                     res.status(500).send(error.message);
-                })
-        }).catch((error)=>res.status(500).send(error.message));
-
-        //somehow need to validate that the crush is a real person and get their netid from that--another user_controller method?
-            
-
+                });
         });
-
 
 export default router;
