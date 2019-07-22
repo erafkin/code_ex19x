@@ -12,7 +12,7 @@ require('dotenv').config(); // load environment variables
 
 // database setup
 // || 'mongodb://localhost/lc19x';
-const mongoURI = process.env.MONGODB_URI;
+const mongoURI = "mongodb+srv://lc19x:lastchances19x@lc19x-nfyrs.mongodb.net/lc19x";
 mongoose.connect(mongoURI,{ useNewUrlParser: true });
 
 mongoose.connection.on("open", function(ref) {
