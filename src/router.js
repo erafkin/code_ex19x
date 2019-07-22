@@ -14,16 +14,17 @@ router.route('/logout').get((req, res) => {
 
 
 
-//global variables
-let crush_list_final = []; 
-let match_list_final = [];
-let user_final = undefined;
-let netid_final = "";
-let crush_number_final = 0;
+
 
 //main call, get all of the info that we will need to display and save them as variables.
 router.route('/')
     .get((req, res, next)=>{
+        //global variables
+    let crush_list_final = []; 
+    let match_list_final = [];
+    let user_final = undefined;
+    let netid_final = "";
+    let crush_number_final = 0;
 
     //cas auth
     passport.authenticate('cas', (err, user, info)=>{
@@ -54,7 +55,7 @@ router.route('/')
                                 crush_number_final = crushes;
 
                                 //redirect them!
-                                res.redirect('/entry');
+                                res.redirect('/entry', {"netid_final":netid_final, "crush_list_final":crush_list_final, "match_list_final":match_list_final, "crush_number_final":crush_number_final});
                             })
                             .catch((error)=>{
                                 res.status(500).send(error.message);
@@ -97,55 +98,71 @@ router.route('/')
     // to update the crushes, matches, and crush number 
     router.route('/crushes')
     .post((req, res, next) => {
-    //I call it req.body.crush as in that is what I'm assuming will be the crush's id
-        let crush = req.body.entry;
-        let crush_id = "";
-        UserID.legalNametoNetid(crush)
-        .then((id)=>{
-            crush_id=id;
-            UserID.getCrushes(crush_id)
-                .then((results) => {
-                    
-                    if(req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
-                        res.redirect('/');
-                      }
-                      // Put your secret key here.
-                      var secretKey = "6LeLx64UAAAAAHgfKOR5zl8e8TWms5su7tkadBP9";
-                      // req.connection.remoteAddress will provide IP address of connected user.
-                      var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
-                      // Hitting GET request to the URL, Google will respond with success or error scenario.
-                      request(verificationUrl,function(error,response,body) {
-                        body = JSON.parse(body);
-                        // Success will be true or false depending upon captcha validation.
-                        if(body.success !== undefined && !body.success) {
-                          res.redirect('/');
-                        }else{
-                            let user_legal_name = "";
-                            UserID.netidToLegalName(netid_final).then((uln)=>{
-                                user_legal_name = uln;
-                                if(results.includes(user_legal_name)){
-                                    UserID.updateMatches(user_legal_name, crush);
-                                    UserID.updateMatches(crush, user_legal_name);
-                                    UserID.updateCrushes(netid_final, crush);
-                                }else{
-                                    UserID.updateCrushes(netid_final, crush);
-                                }
+        passport.authenticate('cas', (err, user, info)=>{
+            user_final = user;
+            console.log("user: "+user);
+            if(err){return err;}
+            if(!user){
+                console.log("rejected");
+                return res.redirect('/');
+            }
+            let netid = "";
+            //get the net id of the user that CAS returns
+            UserID.getNetid(user)
+                .then((ni)=>{
+            //I call it req.body.crush as in that is what I'm assuming will be the crush's id
+                let crush = req.body.entry;
+                let crush_id = "";
+                UserID.legalNametoNetid(crush)
+                .then((id)=>{
+                    crush_id=id;
+                    UserID.getCrushes(crush_id)
+                        .then((results) => {
+                            
+                            if(req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
                                 res.redirect('/');
+                            }
+                            // Put your secret key here.
+                            var secretKey = "6LeLx64UAAAAAHgfKOR5zl8e8TWms5su7tkadBP9";
+                            // req.connection.remoteAddress will provide IP address of connected user.
+                            var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
+                            // Hitting GET request to the URL, Google will respond with success or error scenario.
+                            request(verificationUrl,function(error,response,body) {
+                                body = JSON.parse(body);
+                                // Success will be true or false depending upon captcha validation.
+                                if(body.success !== undefined && !body.success) {
+                                res.redirect('/');
+                                }else{
+                                    let user_legal_name = "";
+                                    UserID.netidToLegalName(netid_final).then((uln)=>{
+                                        user_legal_name = uln;
+                                        if(results.includes(user_legal_name)){
+                                            UserID.updateMatches(user_legal_name, crush);
+                                            UserID.updateMatches(crush, user_legal_name);
+                                            UserID.updateCrushes(netid_final, crush);
+                                        }else{
+                                            UserID.updateCrushes(netid_final, crush);
+                                        }
+                                        res.redirect('/');
+                                    }).catch((error) => {
+                                        res.status(500).send(error.message);
+                                    });
+                                }
+                            });
+                            
+                            
                             }).catch((error) => {
                                 res.status(500).send(error.message);
                             });
-                        }
-                    });
-                    
-                    
+                            
+                        })
+                        .catch((error) => {
+                            res.status(500).send(error.message);
+                        });
                     }).catch((error) => {
                         res.status(500).send(error.message);
                     });
-                    
-                })
-                .catch((error) => {
-                    res.status(500).send(error.message);
-                });
         });
+    });
 
 export default router;
