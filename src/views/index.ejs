@@ -8,6 +8,38 @@
 
             <link rel = "shortcut icon" href = "/img/favicon.ico">
 
+            <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+            <link rel="stylesheet" href="/resources/demos/style.css">
+            <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+            <script>
+                $(function () {
+                var availableTags = [];
+                $.getJSON("/names.json", function(json){
+                    for(var i = 0; i < json.length; i ++){
+                    if(json[i]["legal_name"]!== null){
+                        availableTags.push(json[i]["legal_name"]);
+                    }  
+                    }
+                });
+                $("#input-box").autocomplete({
+                    source: availableTags,
+                    minLength: 3
+                });
+
+                $.ui.autocomplete.filter = function (array, term) {
+                    var regTab = term.split(" ");
+                    var regex = regTab.join('[\\w ]*');
+                    var matcher = new RegExp("^" + regex, "i");
+                    return $.grep(array, function (value) {
+                    return matcher.test(value.label || value.value || value);
+                    });
+                };
+                });
+            </script>
+
     </head>
     <body>
             <h1>19X - <i>SUMMER LOVIN'</i></h1>
@@ -90,8 +122,7 @@
             var y =  document.getElementById("crush-list");
             y.classList = "hide";            
             }
+            </script>
+        </body>
 
-
-        </script>
-    </body>
-</html>
+        </html>
