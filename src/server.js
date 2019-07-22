@@ -39,7 +39,7 @@ app.use(morgan('dev'));
 
 // this just allows us to render ejs from the ../app/views directory
 app.set('view engine', 'ejs');
-app.use(express.static('./styles.css'));
+app.use(express.static('static'));
 app.set('views', path.join(__dirname, '../src/views'));
 
 // enable json message body for posting data to API

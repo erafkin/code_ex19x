@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
   <title>Last Chances 19X</title>
   <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
@@ -95,27 +96,30 @@
                                 data-sitekey="6Lcd-gcTAAAAALEa5oV92jQvn6TwzqX5eVCxm3MF"></div>
                             </div> -->
 
-      <div class="row">
-        <div class="col-sm-4 col-sm-offset-4">
-          <input id="submit" type="submit" class="btn btn-primary">
-        </div>
-      </div>
-  </form>
-  <script>
-    function showCrushes() {
-      var x = document.getElementById("crush-list");
-      x.classList.toggle("show");
-    }
-    function showSuggested() {
-      var x = document.getElementById("suggested-name-container");
-      x.classList.toggle("show");
-    }
-    function showMatches() {
-      var x = document.getElementById("match-list");
-      x.classList.toggle("show");
-    }
+                    
+                            <div class="row">
+                              <div class="col-sm-4 col-sm-offset-4">
+                                <input id="submit" type="submit" class="btn btn-primary">
+                              </div>
+                            </div>
+                          </form>
+                </div>
+        <script>
+        function showCrushes() {
+            var x = document.getElementById("crush-list");
+                x.classList.toggle("show");  
+            var y =  document.getElementById("match-list");
+               y.classList = "hide";
+            
+        }
+        function showMatches() {
+            var x = document.getElementById("match-list");
+                x.classList.toggle("show");   
+            var y =  document.getElementById("crush-list");
+            y.classList = "hide";            
+            }
 
-  </script>
-</body>
 
+        </script>
+    </body>
 </html>
