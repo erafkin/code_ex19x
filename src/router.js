@@ -110,7 +110,7 @@ router.route('/')
                         res.redirect('/');
                       }
                       // Put your secret key here.
-                      var secretKey = process.env.SECRET_KEY;
+                      var secretKey = "6LeLx64UAAAAAHgfKOR5zl8e8TWms5su7tkadBP9";
                       // req.connection.remoteAddress will provide IP address of connected user.
                       var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
                       // Hitting GET request to the URL, Google will respond with success or error scenario.
