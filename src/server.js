@@ -11,8 +11,8 @@ import router from './router';
 require('dotenv').config(); // load environment variables
 
 // database setup
-
-const mongoURI = process.env.MONGODB_URI  || 'mongodb://localhost/lc19x';
+// || 'mongodb://localhost/lc19x';
+const mongoURI = process.env.MONGODB_URI;
 mongoose.connect(mongoURI,{ useNewUrlParser: true });
 
 mongoose.connection.on("open", function(ref) {
