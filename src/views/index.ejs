@@ -4,24 +4,34 @@
             <title>Last Chances 19X</title>
             <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
             <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+            <link href="/styles.css" rel="stylesheet" type="text/css">
+
             <link rel = "shortcut icon" href = "./favicon.ico">
 
     </head>
     <body>
             <h1>19X - <i>SUMMER LOVIN'</i></h1>
-            <h2>LOGGED IN AS <%= user %> <a href='/logout'>LOGOUT</a></h2>
-            <p>Your picks are kept private unless you are matched. Matches are done by a compter program. Concerns? Questions? <b>lastchances19x@gmail.com</b></p>
-            <h3><b>HOW TO USE:</b></h3>
-            <ol>
-                <li>Enter a name in the box, then press <b>submit</b>!</li>
-                <li>You will be taken to a page suggesting <b>full names</b> underneath each box based on the original entry.</li>
-                <li>For each crush, click the <b>link</b> containing the name as it appears in the <b>DND</b>, then hit <b>submit</b> once more!</li>
-              </ol>
-            <p><b>Crush entries cannot be deleted. Choose Carefully!</b></p>
+            <h3>LOGGED IN AS <%= user %> <a href='/logout'>LOGOUT</a></h3>
+            <p>Your picks are kept private unless you are matched. Matches are done by a compter program. Concerns? Questions? Site is down? <b>lastchances19x@gmail.com</b> </p>
+            <div class = "rules">
+                <h3><b>HOW TO USE:</b></h3>
+                <ol>
+                    <li>Enter a name in the box, then press <b>submit</b>!</li>
+                    <li>You will be taken to a page suggesting <b>full names</b> underneath each box based on the original entry.</li>
+                    <li>For each crush, click the <b>link</b> containing the name as it appears in the <b>DND</b>, then hit <b>submit</b> once more!</li>
+                </ol>
+                <p><b>Crush entries cannot be deleted. Choose Carefully!</b></p>
+            </div>
+           
+           
+            <div class = "block" id = "left">
             <p> There are <%= crushes %> people crushing on you!</p>
                 <button class="btn" id = "crush-btn" type="button" onClick= showCrushes()>
                         VIEW YOUR CRUSHES
                 </button>
+                <button class="btn" id = "match-btn" type="button" onClick= showMatches()>
+                    VIEW YOUR MATCHES
+                 </button>
                 <div id = "crush-list" class = "hide">
                     <% if (crush_list.length > 0) { %>
                         <% for (var i = 0; i < crush_list.length; i++) { %>
@@ -32,9 +42,7 @@
  
                 </div>
 
-                <button class="btn" id = "match-btn" type="button" onClick= showMatches()>
-                        VIEW YOUR MATCHES
-                </button>
+
                 <div id = "match-list" class = "hide">
                         <% if (match_list.length > 0) { %>
                             <% for (var i = 0; i < match_list.length; i++) { %>
@@ -44,8 +52,8 @@
                         <% } %> 
      
                     </div>
-
-
+                </div>
+                <div class = "block" id = "right">
                     <form id="entries-form" method="post" action="/crushes">
                     
                             <div id="entries-container">
@@ -66,15 +74,22 @@
                               </div>
                             </div>
                           </form>
+                </div>
         <script>
         function showCrushes() {
             var x = document.getElementById("crush-list");
-                x.classList.toggle("show");        
-            }
+                x.classList.toggle("show");  
+            var y =  document.getElementById("match-list");
+               y.classList = "hide";
+            
+        }
         function showMatches() {
             var x = document.getElementById("match-list");
-                x.classList.toggle("show");        
+                x.classList.toggle("show");   
+            var y =  document.getElementById("crush-list");
+            y.classList = "hide";            
             }
+
 
         </script>
     </body>

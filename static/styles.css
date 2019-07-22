@@ -1,0 +1,35 @@
+h1{
+    font-family: 'Roboto', sans-serif;
+    color: #006600;
+}
+body{
+    text-align: center;
+}
+.rules{
+    text-align: left;
+    margin-left: 5%;
+}
+.block{
+    display: inline-block;
+
+}
+#right{
+    width: 65%;
+    text-align: left;
+    justify-content: left;
+}
+#left{
+    
+    float:left;
+    width: 30%;
+}
+.btn{
+    color: white;
+    background-color: #006600;
+}
+.btn:hover{
+    color:white;
+}
+.btn:focus{
+    color:white;
+}
