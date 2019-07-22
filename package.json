@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec babel-node src/server.js",
     "build": "babel src -d dist",
-    "prod": "npm build; node dist/server.js"
+    "prod": "npm run-script build; node dist/server.js"
   },
   "repository": {
     "type": "git",
