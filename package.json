@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec babel-node src/server.js",
-    "prod": "npm run build; node dist/server.js"
+    "build": "babel src -d dist",
+    "prod": "npm build; node dist/server.js"
 
   },
   "repository": {
