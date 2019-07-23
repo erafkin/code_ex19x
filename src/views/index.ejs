@@ -62,8 +62,8 @@
                 <ol>
                     <li>Enter a name in the box</li>
                     <li>Select the correct name from the drop down. <b>If you don't select a name from the dropdown, you won't be able to submit</b></li>
-                    <li>Select the reCAPTCHA box. IF YOU DON'T SELECT THE RECAPTCHA BOX BEFORE SUBMIT YOUR CRUSH WILL NOT BE SUBMITTED</li>
-                    <li>Hit <b>submit</b>!</li>
+                    <li>Select the reCAPTCHA box. <b>If you don't check the reCAPTCHA box, your crush will not be submitted.</b></li>
+                    <li>Hit <b>submit</b>! ONLY ONCE!</li>
                 </ol>
                 <p><b>Crush entries cannot be deleted. Choose Carefully!</b></p>
             </div>
@@ -115,7 +115,9 @@
                             <div class="row">
                               <div class="col-sm-4 col-sm-offset-4">
                                     <div class="g-recaptcha" data-sitekey="6LeLx64UAAAAAN4u_cKRf2O3SaGBWVYzjKkJYk1z"></div><br>
-                                <input id="submit" type="submit" class="btn btn-primary" disabled= true>
+                                <input id="submit" type="submit" class="btn btn-primary" disabled= true onclick="this.disabled=true;
+                                this.value='Sending…';
+                                ">
                               </div>
                             </div>
                           </form>
@@ -127,6 +129,7 @@
                 <script>
                 $(document).ready(function() {
                 $('#submit').submit(function() {
+
                     $(this).ajaxSubmit({
                     error: function(xhr) {
                         status('Error: ' + xhr.status);
@@ -136,6 +139,7 @@
                     }
                     });
                     //Very important line, it disable the page refresh.
+
                     return false;
                 });
                 });
@@ -154,6 +158,7 @@
             var y =  document.getElementById("crush-list");
             y.classList = "hide";            
             }
+ 
             </script>
         </body>
 
