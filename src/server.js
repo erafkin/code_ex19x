@@ -56,19 +56,6 @@ app.use(bodyParser.json());
 
 app.use('/', router);
 
-
-//endpoint to ping to keep it awake
-app.get('/dev', (req, res) => {
-    res.send('wake up heroku!');
-  });
-
-// ping the server every 20 minutes so heroku stays awake
-
-//TODO: NEED TO PUT IN OUR SERVER NAME (and uncomment that)
-setInterval(function() {
-    http.get("http://last-chances-19x.herokuapp.com/dev");
-  }, 1200000); // every 5 minutes (300000)
-
 // START THE SERVER
 // =============================================================================
 const port = process.env.PORT || 3000;
