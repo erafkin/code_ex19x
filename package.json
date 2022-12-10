@@ -28,7 +28,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
     "ejs": "^2.6.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-session": "^1.16.2",
     "fs": "0.0.1-security",
     "http": "0.0.0",
